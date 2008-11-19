@@ -1,0 +1,43 @@
+= Pickler
+
+Synchronize user stories in Pivotal Tracker with Cucumber features.
+
+== Getting started
+
+  echo "api_token: ..."  > ~/.tracker.yml
+  echo "project_id: ..." > ~/my/app/features/tracker.yml
+
+For details about the Pivotal Tracker API, including where to find your API
+token and project id, see http://www.pivotaltracker.com/help/api .
+
+The pull and push commands map the story's name into the "Feature: ..." line
+and the story's description with an additional two space indent into the
+feature's body.  Keep this in mind when entering stories into Pivotal Tracker.
+
+== Usage
+
+  pickler pull
+
+Download all well formed stories to the features/ directory.  Previously
+unseen stories will be given a numeric filename that you are encouraged to
+change.
+
+  pickler push
+
+Upload all features with a tracker url in a comment on the first line.
+
+  pickler search <query>
+
+List all stories matching the given query.
+
+  pickler show <id>
+
+Show details for the story referenced by the id.
+
+== Disclaimer
+
+No warranties, expressed or implied.
+
+Notably, the push and pull commands are quite happy to blindly clobber
+features if so instructed.  Pivotal Tracker has a history to recover things
+server side.
