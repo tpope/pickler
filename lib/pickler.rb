@@ -39,8 +39,10 @@ class Pickler
       pickler.push(*argv)
     when 'pull'
       pickler.pull(*argv)
+    when 'finish'
+      pickler.finish(argv.first)
     when 'help', '--help', '-h', '', nil
-      puts 'pickler commands: show <id>, search <query>, push, pull'
+      puts 'pickler commands: show <id>, search <query>, push, pull, finish <id>'
     else
       $stderr.puts "pickler: unknown command #{first}"
       exit 1
@@ -167,6 +169,13 @@ class Pickler
     end
   end
 
+  def finish(*args)
+    push(*args).each do |local|
+      remote = local.story
+      remote.transition!("finished") unless remote.complete?
+    end
+  end
+
   protected
 
   def normalize_feature(body)
@@ -208,7 +217,7 @@ class Pickler
     end
 
     def story
-      @pickler.project.story(id) if id
+      @story ||= @pickler.project.story(id) if id
     end
 
   end
