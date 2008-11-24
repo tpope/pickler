@@ -14,6 +14,22 @@ class Pickler
         super(attributes)
       end
 
+      def transition!(state)
+        raise Pickler::Tracker::Error, "Invalid state #{state}", caller unless STATES.include?(state)
+        self.current_state = state
+        if id
+          xml = "<story><current-state>#{state}</current-state></story>"
+          error = tracker.request_xml(:put, resource_url, xml).fetch("errors",{})["error"] || true
+        else
+          error = save
+        end
+        raise Pickler::Tracker::Error, Array(error).join("\n"), caller unless error == true
+      end
+
+      def complete?
+        %w(finished delivered accepted).include?(current_state)
+      end
+
       def tracker
         project.tracker
       end
@@ -64,24 +80,24 @@ class Pickler
 
       def destroy
         if id
-          request = tracker.request_xml(:delete, "/projects/#{project.id}/stories/#{id}", to_xml)
-          raise Error, request["message"], caller if request["success"] != "true"
+          response = tracker.request_xml(:delete, "/projects/#{project.id}/stories/#{id}", to_xml)
+          raise Error, response["message"], caller if response["success"] != "true"
           @attributes["id"] = nil
           self
         end
       end
 
+      def resource_url
+        ["/projects/#{project.id}/stories",id].compact.join("/")
+      end
+
       def save
-        if id
-          request = tracker.request_xml(:put, "/projects/#{project.id}/stories/#{id}", to_xml)
-        else
-          request = tracker.request_xml(:post, "/projects/#{project.id}/stories", to_xml)
-        end
-        if request["success"] == "true"
-          initialize(project, request["story"])
+        response = tracker.request_xml(id ? :put : :post,  resource_url, to_xml)
+        if response["success"] == "true"
+          initialize(project, response["story"])
           true
         else
-          Array(request["errors"]["error"])
+          Array(response["errors"]["error"])
         end
       end
 
