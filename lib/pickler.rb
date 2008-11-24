@@ -117,9 +117,31 @@ class Pickler
     Dir[features_path('**','*.feature')].map {|f| LocalFeature.new(self,f)}
   end
 
-  def pull
+  def feature(string)
+    if string =~ /^(\d+)$/ || string =~ %r{^http://www\.pivotaltracker\.com/\S*/(\d+)}
+      local_features.detect {|f| f && f.id.to_s == string}
+    elsif !string
+      raise Error, "No feature given"
+    else
+      paths = [features_path("#{string}.feature"),features_path(string),string]
+      path = paths.detect {|p| File.exist?(p)}
+      LocalFeature.new(self,path) if path
+    end or raise Error, "Unrecogizable feature #{string}"
+  end
+
+  def story(string)
+    if string =~ /^(\d+)$/ || string =~ %r{^http://www\.pivotaltracker\.com/\S*/(\d+)}
+      project.story($1)
+    else
+      feature(string).story
+    end
+  end
+
+  def pull(*args)
     l = local_features
-    remote_features.each do |remote|
+    args.map! {|arg| story(arg)}
+    args.replace(remote_features) if args.empty?
+    args.each do |remote|
       body = "# http://www.pivotaltracker.com/story/show/#{remote.id}\n" <<
       normalize_feature(remote.to_s)
       if local = l.detect {|f| f.id == remote.id}
@@ -133,8 +155,10 @@ class Pickler
     nil
   end
 
-  def push
-    local_features.select do |local|
+  def push(*args)
+    args.map! {|a| feature(a)}
+    args.replace(local_features) if args.empty?
+    args.select do |local|
       next unless local.id
       remote = local.story
       next if remote.to_s == local.to_s
@@ -176,7 +200,7 @@ class Pickler
 
     def id
       unless defined?(@id)
-        @id = if id = to_s[%r{#\s*http://www\.pivotaltracker\.com/\S*?/(\d+)},1]
+        @id = if id = to_s[%r{#\s*http://www\.pivotaltracker\.com/\S*/(\d+)},1]
                 id.to_i
               end
       end
