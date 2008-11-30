@@ -111,7 +111,7 @@ class Pickler
     Cucumber.language['scenario']
   end
 
-  def remote_features
+  def stories
     project.stories(scenario_word, :includedone => true).select do |s|
       s.to_s =~ /^\s*#{Regexp.escape(scenario_word)}:/ && parser.parse(s.to_s)
     end
@@ -144,7 +144,7 @@ class Pickler
   def pull(*args)
     l = local_features
     args.map! {|arg| story(arg)}
-    args.replace(remote_features) if args.empty?
+    args.replace(stories) if args.empty?
     args.each do |remote|
       body = "# http://www.pivotaltracker.com/story/show/#{remote.id}\n" <<
       normalize_feature(remote.to_s)
