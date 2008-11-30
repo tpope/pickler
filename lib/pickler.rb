@@ -162,7 +162,7 @@ class Pickler
   def start(*args)
     args.each do |arg|
       story = story(arg)
-      story.transition!("started") if story.current_state == "unstarted"
+      story.transition!("started") if %w(unstarted rejected).include?(story.current_state)
     end
     pull(*args)
   end
