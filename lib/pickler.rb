@@ -40,7 +40,7 @@ class Pickler
     when 'pull'
       pickler.pull(*argv)
     when 'start'
-      pickler.start(argv.first)
+      pickler.start(argv.first,argv[1])
     when 'finish'
       pickler.finish(argv.first)
     when 'help', '--help', '-h', '', nil
@@ -140,12 +140,8 @@ class Pickler
     end
   end
 
-  def start(*args)
-    args.each do |arg|
-      story = story(arg)
-      story.transition!("started") if %w(unstarted rejected).include?(story.current_state)
-    end
-    pull(*args)
+  def start(arg, default = nil)
+    feature(arg).start(default)
   end
 
   def push(*args)

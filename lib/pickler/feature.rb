@@ -54,6 +54,11 @@ class Pickler
       @filename = filename
     end
 
+    def start(default = nil)
+      story.transition!("started") if story.startable?
+      pull(default)
+    end
+
     def push
       return if story.to_s == local_body.to_s
       story.to_s = local_body

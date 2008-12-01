@@ -30,6 +30,10 @@ class Pickler
         %w(finished delivered accepted).include?(current_state)
       end
 
+      def startable?
+        %w(unstarted rejected).include?(current_state)
+      end
+
       def tracker
         project.tracker
       end
