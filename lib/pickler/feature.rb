@@ -30,7 +30,7 @@ class Pickler
     end
 
     def local_body
-      File.read(@filename) if @filename
+      File.read(filename) if filename
     end
 
     def filename
