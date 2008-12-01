@@ -117,32 +117,24 @@ class Pickler
     end
   end
 
-  def local_features
-    Dir[features_path('**','*.feature')].map {|f| LocalFeature.new(self,f)}
-  end
-
-  def feature(string)
-    if string =~ /^(\d+)$/ || string =~ %r{^http://www\.pivotaltracker\.com/\S*/(\d+)}
-      local_features.detect {|f| f && f.id.to_s == string}
-    elsif !string
-      raise Error, "No feature given"
+  def features(*args)
+    if args.any?
+      args.map {|a| feature(a)}
     else
-      paths = [features_path("#{string}.feature"),features_path(string),string]
-      path = paths.detect {|p| File.exist?(p)}
-      LocalFeature.new(self,path) if path
-    end or raise Error, "Unrecogizable feature #{string}"
-  end
-
-  def story(string)
-    if string =~ /^(\d+)$/ || string =~ %r{^http://www\.pivotaltracker\.com/\S*/(\d+)}
-      project.story($1)
-    else
-      feature(string).story
+      Dir[features_path('**','*.feature')].map {|f|feature(f)}.select {|f|f.id}
     end
   end
 
+  def feature(string)
+    Feature.new(self,string)
+  end
+
+  def story(string)
+    feature(string).story
+  end
+
   def pull(*args)
-    l = local_features
+    l = features
     args.map! {|arg| story(arg)}
     args.replace(stories) if args.empty?
     args.each do |remote|
@@ -168,21 +160,14 @@ class Pickler
   end
 
   def push(*args)
-    args.map! {|a| feature(a)}
-    args.replace(local_features) if args.empty?
-    args.select do |local|
-      next unless local.id
-      remote = local.story
-      next if remote.to_s == local.to_s
-      remote.to_s = local.to_s
-      remote.save
+    features(*args).each do |feature|
+      feature.push
     end
   end
 
   def finish(*args)
-    push(*args).each do |local|
-      remote = local.story
-      remote.transition!("finished") unless remote.complete?
+    features(*args).each do |feature|
+      feature.finish
     end
   end
 
@@ -205,21 +190,64 @@ class Pickler
     new
   end
 
-  class LocalFeature
-    attr_reader :pickler, :filename
+  class Feature
+    URL_REGEX = %r{\bhttp://www\.pivotaltracker\.com/\S*/(\d+)\b}
+    attr_reader :pickler
 
-    def initialize(pickler, filename)
+    def initialize(pickler, identifier)
       @pickler = pickler
-      @filename = filename
+      case identifier
+      when nil, /^\s+$/
+        raise Error, "No feature given"
+
+      when /^#{URL_REGEX}$/, /^(\d+)$/
+        @id = $1.to_i
+
+      when /\.feature$/
+        if File.exist?(identifier)
+          @filename = identifier
+        end
+
+      else
+        if File.exist?(path = pickler.features_path("#{identifier}.feature"))
+          @filename = path
+        end
+
+      end or raise Error, "Unrecogizable feature #{string}"
+    end
+
+    def local_body
+      File.read(@filename) if @filename
+    end
+
+    def filename
+      unless defined?(@filename)
+        @filename = Dir[pickler.features_path("**","*.feature")].detect do |f|
+          File.read(f)[/#\s*#{URL_REGEX}/,1].to_i == @id
+        end
+      end
+      @filename
     end
 
     def to_s
-      File.read(@filename)
+      local_body || story.to_s
+    end
+
+    def push
+      return if story.to_s == local_body.to_s
+      story.to_s = local_body
+      story.save
+    end
+
+    def finish
+      story.current_state = "finished" unless story.complete?
+      story.to_s = local_body
+      story.save
     end
 
     def id
       unless defined?(@id)
-        @id = if id = to_s[%r{#\s*http://www\.pivotaltracker\.com/\S*/(\d+)},1]
+        @id = if id = local_body.to_s[/#\s*#{URL_REGEX}/,1]
                 id.to_i
               end
       end
