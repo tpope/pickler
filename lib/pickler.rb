@@ -111,12 +111,6 @@ class Pickler
     Cucumber.language['scenario']
   end
 
-  def stories
-    project.stories(scenario_word, :includedone => true).select do |s|
-      s.to_s =~ /^\s*#{Regexp.escape(scenario_word)}:/ && parser.parse(s.to_s)
-    end
-  end
-
   def features(*args)
     if args.any?
       args.map {|a| feature(a)}
@@ -134,21 +128,16 @@ class Pickler
   end
 
   def pull(*args)
-    l = features
-    args.map! {|arg| story(arg)}
-    args.replace(stories) if args.empty?
-    args.each do |remote|
-      body = "# http://www.pivotaltracker.com/story/show/#{remote.id}\n" <<
-      normalize_feature(remote.to_s)
-      if local = l.detect {|f| f.id == remote.id}
-        filename = local.filename
-      else
-        next if remote.current_state == 'unstarted'
-        filename = features_path("#{remote.id}.feature")
+    if args.empty?
+      args = project.stories(scenario_word, :includedone => true).reject do |s|
+        s.current_state == 'unstarted'
+      end.select do |s|
+        s.to_s =~ /^\s*#{Regexp.escape(scenario_word)}:/ && parser.parse(s.to_s)
       end
-      File.open(filename,'w') {|f| f.puts body}
     end
-    nil
+    args.each do |arg|
+      feature(arg).pull
+    end
   end
 
   def start(*args)
@@ -172,23 +161,6 @@ class Pickler
   end
 
   protected
-
-  def normalize_feature(body)
-    return body unless ast = parser.parse(body)
-    feature = ast.compile
-    new = ''
-    (feature.header.chomp << "\n").each_line do |l|
-      new << '  ' unless new.empty?
-      new << l.strip << "\n"
-    end
-    feature.scenarios.each do |scenario|
-      new << "\n  Scenario: #{scenario.name}\n"
-      scenario.steps.each do |step|
-        new << "    #{step.keyword} #{step.name}\n"
-      end
-    end
-    new
-  end
 
 end
 
