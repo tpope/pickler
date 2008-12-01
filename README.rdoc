@@ -34,6 +34,14 @@ List all stories matching the given query.
 
 Show details for the story referenced by the id.
 
+  pickler start <id>
+
+Pull a given feature and change its state to started.
+
+  pickler finish <id>
+
+Push a given feature and change its state to finished.
+
 == Disclaimer
 
 No warranties, expressed or implied.
