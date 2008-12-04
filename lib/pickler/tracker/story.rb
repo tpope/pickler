@@ -5,13 +5,14 @@ class Pickler
       TYPES = %w(bug feature chore release)
       STATES = %w(unscheduled unstarted started finished delivered rejected accepted)
 
-      attr_reader :project
-      reader :iteration, :url, :labels
+      attr_reader :project, :iteration
+      reader :url, :labels
       date_reader :created_at, :accepted_at, :deadline
       accessor :current_state, :name, :description, :estimate, :owned_by, :requested_by, :story_type
 
       def initialize(project, attributes = {})
         @project = project
+        @iteration = Iteration.new(project, attributes["iteration"]) if attributes["iteration"]
         super(attributes)
       end
 
