@@ -8,7 +8,7 @@ class Pickler
       attr_reader :project, :iteration
       reader :url, :labels
       date_reader :created_at, :accepted_at, :deadline
-      accessor :current_state, :name, :description, :estimate, :owned_by, :requested_by, :story_type
+      accessor :current_state, :name, :description, :owned_by, :requested_by, :story_type
 
       def initialize(project, attributes = {})
         @project = project
@@ -76,6 +76,10 @@ class Pickler
 
       def notes
         [@attributes["notes"]].flatten.compact.map {|n| Note.new(self,n)}
+      end
+
+      def estimate
+        @attributes["estimate"].to_i < 0 ? nil : @attributes["estimate"]
       end
 
       def comment!(body)
