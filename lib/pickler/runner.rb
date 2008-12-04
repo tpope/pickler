@@ -8,25 +8,42 @@ class Pickler
       @pickler = Pickler.new(Dir.getwd)
     end
 
+    STATE_SYMBOLS = {
+      "unscheduled" => "  ",
+      "unstarted"   => ":|",
+      "started"     => ":/",
+      "finished"    => ":)",
+      "delivered"   => ";)",
+      "rejected"    => ":(",
+      "accepted"    => ":D"
+    }
+
+    TYPE_SYMBOLS = {
+      "feature" => "*",
+      "chore"   => "%",
+      "release" => "!",
+      "bug"     => "/"
+    }
+
+    def puts_summary(story)
+      summary = "%6d " % story.id
+      type  = story.estimate || TYPE_SYMBOLS[story.story_type]
+      state = STATE_SYMBOLS[story.current_state]
+      summary << "#{state} #{type} "
+      summary << story.name
+      puts summary
+    end
+
     def run
       case first = argv.shift
       when 'show', /^\d+$/
         story = pickler.project.story(first == 'show' ? argv.shift : first)
         puts story
       when 'search'
-        stories = pickler.project.stories(*argv).group_by {|s| s.current_state}
-        first = true
-        states = Pickler::Tracker::Story::STATES
-        states -= %w(unstarted accepted) if argv.empty?
-        states.each do |state|
-          next unless stories[state]
-          puts unless first
-          first = false
-          puts state.upcase
-          puts '-' * state.length
-          stories[state].each do |story|
-            puts "[#{story.id}] #{story.story_type.capitalize}: #{story.name}"
-          end
+        stories = pickler.project.stories(*argv)
+        stories.reject! {|s| %w(unscheduled unstarted accepted).include?(s.current_state)} if argv.empty?
+        stories.each do |story|
+          puts_summary story
         end
       when 'push'
         pickler.push(*argv)
