@@ -6,7 +6,8 @@ class Pickler
       STATES = %w(unscheduled unstarted started finished delivered rejected accepted)
 
       attr_reader :project
-      reader :created_at, :iteration, :url, :labels
+      reader :iteration, :url, :labels
+      date_reader :created_at, :accepted_at, :deadline
       accessor :current_state, :name, :description, :estimate, :owned_by, :requested_by, :story_type
 
       def initialize(project, attributes = {})

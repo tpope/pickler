@@ -1,3 +1,5 @@
+require 'date'
+
 class Pickler
   class Tracker
 
@@ -58,6 +60,12 @@ class Pickler
       def self.reader(*methods)
         methods.each do |method|
           define_method(method) { @attributes[method.to_s] }
+        end
+      end
+
+      def self.date_reader(*methods)
+        methods.each do |method|
+          define_method(method) { value = @attributes[method.to_s] and Date.parse(value) }
         end
       end
 
