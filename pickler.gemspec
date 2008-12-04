@@ -16,6 +16,7 @@ Gem::Specification.new do |s|
     "bin/pickler",
     "lib/pickler.rb",
     "lib/pickler/feature.rb",
+    "lib/pickler/runner.rb",
     "lib/pickler/tracker.rb",
     "lib/pickler/tracker/project.rb",
     "lib/pickler/tracker/story.rb"
