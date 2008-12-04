@@ -76,6 +76,11 @@ class Pickler
         end
       end
       reader :id
+
+      def to_xml(options = nil)
+        @attributes.to_xml({:root => self.class.name.split('::').last.downcase}.merge(options||{}))
+      end
+
     end
 
   end
