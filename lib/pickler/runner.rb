@@ -6,6 +6,7 @@ class Pickler
     def initialize(argv)
       @argv = argv
       @pickler = Pickler.new(Dir.getwd)
+      @tty = $stdout.tty?
     end
 
     STATE_SYMBOLS = {
@@ -34,16 +35,36 @@ class Pickler
       puts summary
     end
 
+    def paginated_output
+      stdout = $stdout
+      if @tty && pager = pickler.config["pager"]
+        # Modeled after git
+        ENV["LESS"] ||= "FRSX"
+        IO.popen(pager,"w") do |io|
+          $stdout = io
+          yield
+        end
+      else
+        yield
+      end
+    ensure
+      $stdout = stdout
+    end
+
     def run
       case first = argv.shift
       when 'show', /^\d+$/
         story = pickler.project.story(first == 'show' ? argv.shift : first)
-        puts story
+        paginated_output do
+          puts story
+        end
       when 'search'
         stories = pickler.project.stories(*argv)
         stories.reject! {|s| %w(unscheduled unstarted accepted).include?(s.current_state)} if argv.empty?
-        stories.each do |story|
-          puts_summary story
+        paginated_output do
+          stories.each do |story|
+            puts_summary story
+          end
         end
       when 'push'
         pickler.push(*argv)
