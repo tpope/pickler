@@ -3,7 +3,7 @@ class Pickler
     class Story < Abstract
 
       TYPES = %w(bug feature chore release)
-      STATES = %w(unstarted started finished delivered rejected accepted)
+      STATES = %w(unscheduled unstarted started finished delivered rejected accepted)
 
       attr_reader :project
       reader :created_at, :iteration, :url, :labels
@@ -31,7 +31,7 @@ class Pickler
       end
 
       def startable?
-        %w(unstarted rejected).include?(current_state)
+        %w(unscheduled unstarted rejected).include?(current_state)
       end
 
       def tracker
