@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name                = "pickler"
-  s.version             = "0.0.2"
+  s.version             = "0.0.3"
 
   s.summary             = "PIvotal traCKer Liaison to cucumbER"
   s.description         = "Synchronize between Cucumber and Pivotal Tracker"
@@ -19,6 +19,8 @@ Gem::Specification.new do |s|
     "lib/pickler/tracker.rb",
     "lib/pickler/tracker/project.rb",
     "lib/pickler/tracker/story.rb"
+    "lib/pickler/tracker/iteration.rb"
+    "lib/pickler/tracker/note.rb"
   ]
   s.add_dependency("activesupport", [">= 2.0.0"])
   s.add_dependency("cucumber", [">= 0.1.9"])

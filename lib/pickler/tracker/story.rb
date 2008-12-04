@@ -75,7 +75,7 @@ class Pickler
       end
 
       def notes
-        [@attributes["notes"]].flatten.compact
+        [@attributes["notes"]].flatten.compact.map {|n| Note.new(self,n)}
       end
 
       def comment!(body)
