@@ -19,8 +19,8 @@ Gem::Specification.new do |s|
     "lib/pickler/runner.rb",
     "lib/pickler/tracker.rb",
     "lib/pickler/tracker/project.rb",
-    "lib/pickler/tracker/story.rb"
-    "lib/pickler/tracker/iteration.rb"
+    "lib/pickler/tracker/story.rb",
+    "lib/pickler/tracker/iteration.rb",
     "lib/pickler/tracker/note.rb"
   ]
   s.add_dependency("activesupport", [">= 2.0.0"])
