@@ -18,9 +18,9 @@ class Pickler
       require 'net/http'
       Net::HTTP.start(ADDRESS) do |http|
         headers = {
-          "Token"        => @token,
-          "Accept"       => "application/xml",
-          "Content-type" => "application/xml"
+          "X-TrackerToken" => @token,
+          "Accept"         => "application/xml",
+          "Content-type"   => "application/xml"
         }
         klass = Net::HTTP.const_get(method.to_s.capitalize)
         http.request(klass.new("#{BASE_PATH}#{path}", headers), *args)
