@@ -11,6 +11,7 @@ class Pickler
       end
 
       def story(story_id)
+        raise Error, "No story id given" if story_id.to_s.empty?
         Story.new(self,tracker.get_xml("/projects/#{id}/stories/#{story_id}")["story"])
       end
 
