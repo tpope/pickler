@@ -106,7 +106,7 @@ class Pickler
         end
       when 'search'
         stories = pickler.project.stories(*argv)
-        stories.reject! {|s| %w(unscheduled unstarted accepted).include?(s.current_state)} if argv.empty?
+        stories.reject! {|s| !s.current?} if argv.empty?
         paginated_output do
           stories.each do |story|
             puts_summary story

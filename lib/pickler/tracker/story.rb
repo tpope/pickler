@@ -28,6 +28,10 @@ class Pickler
         raise Pickler::Tracker::Error, Array(error).join("\n"), caller unless error == true
       end
 
+      def current?(as_of = Date.today)
+        iteration && iteration.include?(as_of)
+      end
+
       def complete?
         %w(finished delivered accepted).include?(current_state)
       end

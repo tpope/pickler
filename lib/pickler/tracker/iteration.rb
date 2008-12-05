@@ -18,6 +18,10 @@ class Pickler
         start...finish
       end
 
+      def include?(date)
+        range.include?(date)
+      end
+
       def succ
         self.class.new(project, 'number' => number.succ.to_s, 'start' => @attributes['finish'], 'finish' => (finish + (finish - start)).strftime("%b %d, %Y"))
       end
