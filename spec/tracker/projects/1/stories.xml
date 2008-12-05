@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<response success="true">
+  <stories count="1">
+    <story>
+      <id type="integer">1</id>
+      <story_type>feature</story_type>
+      <url>http://www.pivotaltracker.com/story/show/1</url>
+      <estimate type="integer">1</estimate>
+      <current_state>accepted</current_state>
+      <description></description>
+      <name>More power to shields</name>
+      <requested_by>James Kirk</requested_by>
+      <owned_by>Montgomery Scott</owned_by>
+      <created_at>Sep 16, 2008</created_at>
+      <accepted_at>Sep 16, 2008</accepted_at>
+      <iteration>
+        <number>1</number>
+        <start>Sep 15, 2008</start>
+        <finish>Sep 29, 2008</finish>
+      </iteration>
+    </story>
+  </stories>
+</response>

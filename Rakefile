@@ -6,4 +6,11 @@ Rake::GemPackageTask.new(spec) do |p|
   p.gem_spec = spec
 end
 
-task :default
+begin
+  require 'spec/rake/spectask'
+  Spec::Rake::SpecTask.new(:spec) do |t|
+    t.spec_files = FileList["spec/**/*_spec.rb"]
+  end
+  task :default => :spec
+rescue LoadError
+end
