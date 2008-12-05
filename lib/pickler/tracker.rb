@@ -52,8 +52,11 @@ class Pickler
     end
 
     class Abstract
-      def initialize(attributes)
-        @attributes = (attributes || {}).stringify_keys
+      def initialize(attributes = {})
+        @attributes = {}
+        (attributes || {}).each do |k,v|
+          @attributes[k.to_s] = v
+        end
         yield self if block_given?
       end
 
