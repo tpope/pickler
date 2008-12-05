@@ -37,7 +37,7 @@ describe Pickler::Tracker::Project do
 
   it "should have a story factory" do
     story = @project.new_story
-    story.should be_kind_of Pickler::Tracker::Story
+    story.should be_kind_of(Pickler::Tracker::Story)
     story.id.should be_nil
   end
 
