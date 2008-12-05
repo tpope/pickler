@@ -1,11 +1,14 @@
 class Pickler
   class Runner
 
-    attr_reader :pickler, :argv
+    attr_reader :argv
+
+    def pickler
+      @pickler ||= Pickler.new(Dir.getwd)
+    end
 
     def initialize(argv)
       @argv = argv
-      @pickler = Pickler.new(Dir.getwd)
       @tty = $stdout.tty?
     end
 
