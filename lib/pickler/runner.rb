@@ -21,6 +21,15 @@ class Pickler
         @opts.separator("")
       end
 
+      def self.options
+        @options ||= []
+      end
+
+      def self.on(*args, &block)
+        options << args
+        define_method("option_#{args.object_id}", &block)
+      end
+
       def self.banner_arguments(value = nil)
         if value
           @banner_arguments = value
@@ -66,6 +75,9 @@ class Pickler
       end
 
       def run
+        self.class.options.each do |arguments|
+          @opts.on(*arguments, &method("option_#{arguments.object_id}"))
+        end
         begin
           @opts.parse!(@argv)
         rescue OptionParser::InvalidOption
