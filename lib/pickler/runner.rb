@@ -176,13 +176,36 @@ Show details for the story.
 List all stories matching the given query.
       EOF
 
+      def modifications
+        @modifications ||= {}
+      end
+      [:label, :type, :state].each do |o|
+        on "--#{o} #{o.to_s.upcase}" do |value|
+          modifications[o] = value
+        end
+      end
+      [:requester, :owner, :mywork].each do |o|
+        on "--#{o} USERNAME" do |value|
+          modifications[o] = value
+        end
+      end
+      on "--[no-]includedone", "include accepted stories" do |value|
+        modifications[:includedone] = value
+      end
+
       attr_writer :current
       on "-c", "--current", "filter results to current iteration" do |b|
         self.current = b
       end
 
       process do |*argv|
-        stories = pickler.project.stories(*argv)
+        argv << modifications unless modifications.empty?
+        if argv == [{:includedone => true}]
+          # Bypass the 200 search results limitation
+          stories = pickler.project.stories
+        else
+          stories = pickler.project.stories(*argv)
+        end
         stories.reject! {|s| !s.current?} if argv.empty? || @current
         paginated_output do
           stories.each do |story|
