@@ -235,7 +235,9 @@ encouraged to change.
     command :start do
       banner_arguments "<story> [basename]"
       description <<-EOF
-Push a given feature and change its state to finished.
+Pull a given feature and change its state to started.  If basename is given
+and no local file exists, features/basename.feature will be created in lieu
+of features/id.feature.
       EOF
 
       process do |story_id, *args|
@@ -246,9 +248,7 @@ Push a given feature and change its state to finished.
     command :finish do
       banner_arguments "<story>"
       description <<-EOF
-Pull a given feature and change its state to started.  If basename is given
-and no local file exists, features/basename.feature will be created in lieu
-of features/id.feature.
+Push a given feature and change its state to finished.
       EOF
 
       process do |story_id|
