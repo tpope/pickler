@@ -303,7 +303,7 @@ Requires launchy (gem install launchy).
         @special = "profile"
       end
       on "--time", "not publicly available" do
-        @special = "time_shifts"
+        @special = "time_shifts?project=#{pickler.project_id}"
       end
 
       process do |*args|
