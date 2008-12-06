@@ -267,6 +267,24 @@ Push a given feature and change its state to finished.
       end
     end
 
+    command :deliver do
+      banner_arguments "[story] ..."
+      description <<-EOF
+Deliver stories.
+      EOF
+      on "--all-finished", "deliver all finished stories" do
+        @all = true
+      end
+      process do |*args|
+        if @all
+          pickler.deliver_all_finished_stories
+        end
+        args.each do |arg|
+          pickler.story(arg).transition!('delivered')
+        end
+      end
+    end
+
     def initialize(argv)
       @argv = argv
     end
