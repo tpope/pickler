@@ -38,11 +38,19 @@ class Pickler
         end
       end
 
+      def self.summary(value = nil)
+        if value
+          @summary = value
+        else
+          @summary
+        end
+      end
+
       def self.description(value = nil)
         if value
           @description = value
         else
-          @description
+          @description || "#@summary."
         end
       end
 
@@ -162,9 +170,7 @@ class Pickler
 
     command :show do
       banner_arguments "<story>"
-      description <<-EOF
-Show details for the story.
-      EOF
+      summary "Show details for a story"
 
       process do |*args|
         case args.size
@@ -183,9 +189,7 @@ Show details for the story.
 
     command :search do
       banner_arguments "[query]"
-      description <<-EOF
-List all stories matching the given query.
-      EOF
+      summary "List all stories matching a query"
 
       def modifications
         @modifications ||= {}
@@ -228,6 +232,7 @@ List all stories matching the given query.
 
     command :push do
       banner_arguments "[story] ..."
+      summary "Upload stories"
       description <<-EOF
 Upload the given story or all features with a tracker url in a comment on the
 first line.
@@ -236,6 +241,7 @@ first line.
 
     command :pull do
       banner_arguments "[story] ..."
+      summary "Download stories"
       description <<-EOF
 Download the given story or all well formed stories to the features/ directory.
 Previously unseen stories will be given a numeric filename that you are
@@ -245,8 +251,9 @@ encouraged to change.
 
     command :start do
       banner_arguments "<story> [basename]"
+      summary "Pull a story and mark it started"
       description <<-EOF
-Pull a given feature and change its state to started.  If basename is given
+Pull a given story and change its state to started.  If basename is given
 and no local file exists, features/basename.feature will be created in lieu
 of features/id.feature.
       EOF
@@ -258,9 +265,7 @@ of features/id.feature.
 
     command :finish do
       banner_arguments "<story>"
-      description <<-EOF
-Push a given feature and change its state to finished.
-      EOF
+      summary "Push a story and mark it finished"
 
       process do |story_id|
         super
@@ -269,9 +274,7 @@ Push a given feature and change its state to finished.
 
     command :deliver do
       banner_arguments "[story] ..."
-      description <<-EOF
-Deliver stories.
-      EOF
+      summary "Mark stories delivered"
       on "--all-finished", "deliver all finished stories" do
         @all = true
       end
@@ -287,6 +290,7 @@ Deliver stories.
 
     command :browse do
       banner_arguments "[story]"
+      summary "Open a story in the web browser"
       description <<-EOF
 Open project or a story in the web browser.
 
@@ -376,11 +380,16 @@ Requires launchy (gem install launchy).
         result = klass.new(@argv).run
         exit result.respond_to?(:to_int) ? result.to_int : 0
       elsif ['help', '--help', '-h', '', nil].include?(command)
+        puts "usage: pickler <command> [options] [arguments]"
+        puts
+        puts "Commands:"
+        self.class.commands.each do |command|
+          puts "    %-19s %s" % [command.command_name, command.summary]
+        end
+        puts
         puts "Run pickler <command> --help for help with a given command"
-        puts "Available commands: #{self.class.commands.map {|c|c.command_name}.join(', ')}"
       else
         raise Error, "Unknown pickler command #{command}"
-        exit 1
       end
     rescue Pickler::Error
       $stderr.puts "#$!"
