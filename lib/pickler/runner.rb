@@ -285,6 +285,41 @@ Deliver stories.
       end
     end
 
+    command :browse do
+      banner_arguments "[story]"
+      description <<-EOF
+Open project or a story in the web browser.
+
+Requires launchy (gem install launchy).
+      EOF
+
+      on "--dashboard" do
+        @special = "dashboard"
+      end
+      on "--faq" do
+        @special = "help"
+      end
+      on "--profile", "get your API Token here" do
+        @special = "profile"
+      end
+      on "--time", "not publicly available" do
+        @special = "time_shifts"
+      end
+
+      process do |*args|
+        too_many if args.size > 1 || @special && args.first
+        if args.first
+          url = pickler.story(args.first).url
+        elsif @special
+          url = "http://www.pivotaltracker.com/#@special"
+        else
+          url = "http://www.pivotaltracker.com/projects/#{pickler.project_id}/stories"
+        end
+        require 'launchy'
+        Launchy.open(url)
+      end
+    end
+
     def initialize(argv)
       @argv = argv
     end
