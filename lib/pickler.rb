@@ -5,6 +5,10 @@ class Pickler
   class Error < RuntimeError
   end
 
+  autoload :Runner,  'pickler/runner'
+  autoload :Feature, 'pickler/feature'
+  autoload :Tracker, 'pickler/tracker'
+
   def self.config
     @config ||= {'api_token' => ENV["TRACKER_API_TOKEN"]}.merge(
       if File.exist?(path = File.expand_path('~/.tracker.yml'))
@@ -14,7 +18,6 @@ class Pickler
   end
 
   def self.run(argv)
-    require 'pickler/runner'
     Runner.new(argv).run
   end
 
@@ -120,6 +123,3 @@ class Pickler
   protected
 
 end
-
-require 'pickler/feature'
-require 'pickler/tracker'
