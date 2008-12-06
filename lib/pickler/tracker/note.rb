@@ -11,7 +11,7 @@ class Pickler
       end
 
       def to_xml
-        @attributes.to_xml(:root => 'note')
+        @attributes.to_xml(:dasherize => false, :root => 'note')
       end
 
       def inspect

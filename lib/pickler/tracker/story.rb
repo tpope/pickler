@@ -88,14 +88,14 @@ class Pickler
 
       def comment!(body)
         raise ArgumentError if body.strip.empty? || body.size > 5000
-        response = tracker.request_xml(:post, "#{resource_url}/notes",{:text => body}.to_xml(:root => 'note'))
+        response = tracker.request_xml(:post, "#{resource_url}/notes",{:text => body}.to_xml(:dasherize => false, :root => 'note'))
         Note.new(self, response["note"])
       end
 
       def to_xml
         hash = @attributes.except("id","url","iteration","notes","labels")
         hash["labels"] = Array(@attributes["labels"]).join(", ")
-        hash.to_xml(:root => "story")
+        hash.to_xml(:dasherize => false, :root => "story")
       end
 
       def destroy
