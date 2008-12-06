@@ -176,9 +176,14 @@ Show details for the story.
 List all stories matching the given query.
       EOF
 
+      attr_writer :current
+      on "-c", "--current", "filter results to current iteration" do |b|
+        self.current = b
+      end
+
       process do |*argv|
         stories = pickler.project.stories(*argv)
-        stories.reject! {|s| !s.current?} if argv.empty?
+        stories.reject! {|s| !s.current?} if argv.empty? || @current
         paginated_output do
           stories.each do |story|
             puts_summary story
