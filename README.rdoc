@@ -7,6 +7,7 @@ Synchronize user stories in Pivotal Tracker with Cucumber features.
   gem install tpope-pickler --source=http://gems.github.com
   echo "api_token: ..."  > ~/.tracker.yml
   echo "project_id: ..." > ~/my/app/features/tracker.yml
+  pickler --help
 
 For details about the Pivotal Tracker API, including where to find your API
 token and project id, see http://www.pivotaltracker.com/help/api .
@@ -19,9 +20,7 @@ feature's body.  Keep this in mind when entering stories into Pivotal Tracker.
 
   pickler pull
 
-Download all well formed stories to the features/ directory.  Previously
-unseen stories will be given a numeric filename that you are encouraged to
-change.
+Download all well formed stories to the features/ directory.
 
   pickler push
 
@@ -31,17 +30,17 @@ Upload all features with a tracker url in a comment on the first line.
 
 List all stories matching the given query.
 
-  pickler show <id>
+  pickler show <story>
 
-Show details for the story referenced by the id.
+Show details for the story.
 
-  pickler start <id> [basename]
+  pickler start <story> [basename]
 
 Pull a given feature and change its state to started.  If basename is given
 and no local file exists, features/basename.feature will be created in lieu
 of features/id.feature.
 
-  pickler finish <id>
+  pickler finish <story>
 
 Push a given feature and change its state to finished.
 
