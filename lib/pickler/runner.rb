@@ -88,7 +88,7 @@ class Pickler
         if arity >= 0 && arity < @argv.size
           abort "too many arguments"
         elsif minimum > @argv.size
-          abort "not enough arguments #{@argv.size} given #{minimum} required"
+          abort "not enough arguments"
         end
         process(*@argv)
       end
