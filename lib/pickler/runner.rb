@@ -74,6 +74,10 @@ class Pickler
         raise Error, message
       end
 
+      def too_many
+        abort "too many arguments"
+      end
+
       def run
         self.class.options.each do |arguments|
           @opts.on(*arguments, &method("option_#{arguments.object_id}"))
@@ -86,7 +90,7 @@ class Pickler
         return @exit if @exit
         minimum = arity < 0 ? -1 - arity : arity
         if arity >= 0 && arity < @argv.size
-          abort "too many arguments"
+          too_many
         elsif minimum > @argv.size
           abort "not enough arguments"
         end
@@ -162,10 +166,17 @@ class Pickler
 Show details for the story.
       EOF
 
-      process do |story_id|
-        story = pickler.project.story(story_id)
-        paginated_output do
-          puts story
+      process do |*args|
+        case args.size
+        when 0
+          puts "#{pickler.project_id} #{pickler.project.name}"
+        when 1
+          story = pickler.project.story(args.first)
+          paginated_output do
+            puts story
+          end
+        else
+          too_many
         end
       end
     end
