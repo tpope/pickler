@@ -47,10 +47,8 @@ class Pickler
     end
 
     def pull(default = nil)
-      body = "# http://www.pivotaltracker.com/story/show/#{id}\n" <<
-      normalize_feature(story.to_s)
       filename = filename() || pickler.features_path("#{default||id}.feature")
-      File.open(filename,'w') {|f| f.puts body}
+      File.open(filename,'w') {|f| f.puts story}
       @filename = filename
     end
 
@@ -82,25 +80,6 @@ class Pickler
 
     def story
       @story ||= @pickler.project.story(id) if id
-    end
-
-    protected
-
-    def normalize_feature(body)
-      return body unless ast = pickler.parser.parse(body)
-      feature = ast.compile
-      new = ''
-      (feature.header.chomp << "\n").each_line do |l|
-        new << '  ' unless new.empty?
-        new << l.strip << "\n"
-      end
-      feature.scenarios.each do |scenario|
-        new << "\n  Scenario: #{scenario.name}\n"
-        scenario.steps.each do |step|
-          new << "    #{step.keyword} #{step.name}\n"
-        end
-      end
-      new
     end
 
   end
