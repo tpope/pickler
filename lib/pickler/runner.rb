@@ -177,7 +177,7 @@ class Pickler
         when 0
           puts "#{pickler.project_id} #{pickler.project.name}"
         when 1
-          story = pickler.project.story(args.first)
+          story = pickler.story(args.first)
           paginated_output do
             puts story
           end
