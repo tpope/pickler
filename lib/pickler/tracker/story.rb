@@ -93,7 +93,9 @@ class Pickler
       end
 
       def to_xml
-        hash = @attributes.except("id","url","iteration","notes","labels")
+        hash = @attributes.reject do |k,v|
+          !%w(current_state deadline description estimate name owned_by requested_by story_type).include?(k)
+        end
         hash["labels"] = Array(@attributes["labels"]).join(", ")
         hash.to_xml(:dasherize => false, :root => "story")
       end
