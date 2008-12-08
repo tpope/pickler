@@ -30,19 +30,21 @@ Upload all features with a tracker url in a comment on the first line.
 
 List all stories matching the given query.
 
-  pickler show <story>
+  pickler start <story>
 
-Show details for the story.
-
-  pickler start <story> [basename]
-
-Pull a given feature and change its state to started.  If basename is given
-and no local file exists, features/basename.feature will be created in lieu
-of features/id.feature.
+Pull a given feature and change its state to started.
 
   pickler finish <story>
 
 Push a given feature and change its state to finished.
+
+  pickler --help
+
+Full list of commands.
+
+  pickler <command> --help
+
+Further help for a given command.
 
 == Disclaimer
 
