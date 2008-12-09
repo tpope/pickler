@@ -237,6 +237,13 @@ class Pickler
 Upload the given story or all features with a tracker url in a comment on the
 first line.
       EOF
+
+      process do |*args|
+        args.replace(pickler.local_features) if args.empty?
+        args.each do |arg|
+          pickler.feature(arg).push
+        end
+      end
     end
 
     command :pull do
@@ -247,6 +254,13 @@ Download the given story or all well formed stories to the features/ directory.
 Previously unseen stories will be given a numeric filename that you are
 encouraged to change.
       EOF
+
+      process do |*args|
+        args.replace(pickler.scenario_features) if args.empty?
+        args.each do |arg|
+          pickler.feature(arg).pull
+        end
+      end
     end
 
     command :start do
@@ -258,8 +272,8 @@ and no local file exists, features/basename.feature will be created in lieu
 of features/id.feature.
       EOF
 
-      process do |story_id, *args|
-        pickler.start(story_id, args.first)
+      process do |story, *args|
+        pickler.feature(story).start(args.first)
       end
     end
 
@@ -267,8 +281,8 @@ of features/id.feature.
       banner_arguments "<story>"
       summary "Push a story and mark it finished"
 
-      process do |story_id|
-        super
+      process do |story|
+        pickler.feature(story).finish
       end
     end
 
