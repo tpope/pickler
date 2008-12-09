@@ -118,16 +118,20 @@ class Pickler
         end
       end
 
+      def colorize(code, string)
+        if color?
+          "\e[#{code}m#{string}\e[00m"
+        else
+          string
+        end
+      end
+
       def puts_summary(story)
         summary = "%6d " % story.id
         type  = story.estimate || TYPE_SYMBOLS[story.story_type]
         state = STATE_SYMBOLS[story.current_state]
-        if color?
-          summary << "\e[3#{STATE_COLORS[story.current_state]}m#{state}\e[00m "
-          summary << "\e[01;3#{TYPE_COLORS[story.story_type]}m#{type}\e[00m "
-        else
-          summary << "#{state} #{type} "
-        end
+        summary << colorize("3#{STATE_COLORS[story.current_state]}", state) << ' '
+        summary << colorize("01;3#{TYPE_COLORS[story.story_type]}", type) << ' '
         summary << story.name
         puts summary
       end
