@@ -36,6 +36,14 @@ describe Pickler::Tracker::Story do
     @story.accepted_at.should be_kind_of(Date)
   end
 
+  it "should have a labels Array" do
+    @project.new_story(:labels =>     nil).should have(0).labels
+    @project.new_story(:labels =>     ' ').should have(0).labels
+    @project.new_story(:labels =>   'foo').should have(1).labels
+    @project.new_story(:labels => %w(x y)).should have(2).labels
+    @project.new_story(:labels =>  'x, y').should have(2).labels
+  end
+
   it "should have an iteration" do
     @story.iteration.should be_kind_of(Pickler::Tracker::Iteration)
   end

@@ -6,7 +6,7 @@ class Pickler
       STATES = %w(unscheduled unstarted started finished delivered rejected accepted)
 
       attr_reader :project, :iteration
-      reader :url, :labels
+      reader :url
       date_reader :created_at, :accepted_at, :deadline
       accessor :current_state, :name, :description, :owned_by, :requested_by, :story_type
 
@@ -14,6 +14,14 @@ class Pickler
         @project = project
         @iteration = Iteration.new(project, attributes["iteration"]) if attributes["iteration"]
         super(attributes)
+      end
+
+      def labels
+        Array(@attributes["labels"]).join(", ").strip.split(/\s*,\s*/).freeze
+      end
+
+      def labels=(array)
+        @attributes["labels"] = array
       end
 
       def transition!(state)
@@ -96,7 +104,7 @@ class Pickler
         hash = @attributes.reject do |k,v|
           !%w(current_state deadline description estimate name owned_by requested_by story_type).include?(k)
         end
-        hash["labels"] = Array(@attributes["labels"]).join(", ")
+        hash["labels"] = labels.join(", ")
         hash.to_xml(:dasherize => false, :root => "story")
       end
 
