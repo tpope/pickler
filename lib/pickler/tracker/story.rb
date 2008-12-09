@@ -5,23 +5,20 @@ class Pickler
       TYPES = %w(bug feature chore release)
       STATES = %w(unscheduled unstarted started finished delivered rejected accepted)
 
-      attr_reader :project, :iteration
+      attr_reader :project, :iteration, :labels
       reader :url
       date_reader :created_at, :accepted_at, :deadline
       accessor :current_state, :name, :description, :owned_by, :requested_by, :story_type
 
       def initialize(project, attributes = {})
         @project = project
-        @iteration = Iteration.new(project, attributes["iteration"]) if attributes["iteration"]
         super(attributes)
+        @iteration = Iteration.new(project, attributes["iteration"]) if attributes["iteration"]
+        @labels = normalize_labels(attributes["labels"])
       end
 
-      def labels
-        Array(@attributes["labels"]).join(", ").strip.split(/\s*,\s*/).freeze
-      end
-
-      def labels=(array)
-        @attributes["labels"] = array
+      def labels=(value)
+        @labels = normalize_labels(value)
       end
 
       def transition!(state)
@@ -100,17 +97,19 @@ class Pickler
         Note.new(self, response["note"])
       end
 
-      def to_xml
+      def to_xml(force_labels = true)
         hash = @attributes.reject do |k,v|
           !%w(current_state deadline description estimate name owned_by requested_by story_type).include?(k)
         end
-        hash["labels"] = labels.join(", ")
+        if force_labels || !id || normalize_labels(@attributes["labels"]) != labels
+          hash["labels"] = labels.join(", ")
+        end
         hash.to_xml(:dasherize => false, :root => "story")
       end
 
       def destroy
         if id
-          response = tracker.request_xml(:delete, "/projects/#{project.id}/stories/#{id}", to_xml)
+          response = tracker.request_xml(:delete, "/projects/#{project.id}/stories/#{id}", "")
           raise Error, response["message"], caller if response["success"] != "true"
           @attributes["id"] = nil
           self
@@ -122,13 +121,18 @@ class Pickler
       end
 
       def save
-        response = tracker.request_xml(id ? :put : :post,  resource_url, to_xml)
+        response = tracker.request_xml(id ? :put : :post,  resource_url, to_xml(false))
         if response["success"] == "true"
           initialize(project, response["story"])
           true
         else
           Array(response["errors"]["error"])
         end
+      end
+
+      private
+      def normalize_labels(value)
+        Array(value).join(", ").strip.split(/\s*,\s*/)
       end
 
     end
