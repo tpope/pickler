@@ -33,8 +33,17 @@ class Pickler
         raise Pickler::Tracker::Error, Array(error).join("\n"), caller unless error == true
       end
 
+      def backlog?(as_of = Date.today)
+        iteration && iteration.start >= as_of
+      end
+
       def current?(as_of = Date.today)
         iteration && iteration.include?(as_of)
+      end
+
+      # In a previous iteration
+      def done?(as_of = Date.today)
+        iteration && iteration.finish <= as_of
       end
 
       def complete?

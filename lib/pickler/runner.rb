@@ -210,11 +210,18 @@ class Pickler
       end
       on "--[no-]includedone", "include accepted stories" do |value|
         modifications[:includedone] = value
+        @iterations ||= []
+        @iterations << :done?
       end
 
-      attr_writer :current
+      on "-b", "--backlog", "filter results to future iterations" do |c|
+        @iterations ||= []
+        @iterations << :backlog?
+      end
+
       on "-c", "--current", "filter results to current iteration" do |b|
-        self.current = b
+        @iterations ||= []
+        @iterations << :current?
       end
 
       process do |*argv|
@@ -225,7 +232,9 @@ class Pickler
         else
           stories = pickler.project.stories(*argv)
         end
-        stories.reject! {|s| !s.current?} if argv.empty? || @current
+        if @iterations && @iterations != [:done?]
+          stories.reject! {|s| !@iterations.any? {|i| s.send(i)}}
+        end
         paginated_output do
           stories.each do |story|
             puts_summary story
