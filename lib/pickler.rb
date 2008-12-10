@@ -47,6 +47,41 @@ class Pickler
     self.class.config.merge(@config)
   end
 
+  def real_name
+    config["real_name"] || (require 'etc'; Etc.getpwuid.gecos.split(',').first)
+  end
+
+  def new_story(attributes = {}, &block)
+    attributes = attributes.inject('requested_by' => real_name) do |h,(k,v)|
+      h.update(k.to_s => v)
+    end
+    project.new_story(attributes, &block)
+  end
+
+  def stories(*args)
+    project.stories(*args)
+  end
+
+  def name
+    project.name
+  end
+
+  def iteration_length
+    project.iteration_length
+  end
+
+  def point_scale
+    project.point_scale
+  end
+
+  def week_start_day
+    project.week_start_day
+  end
+
+  def deliver_all_finished_stories
+    project.deliver_all_finished_stories
+  end
+
   def parser
     require 'cucumber'
     require "cucumber/treetop_parser/feature_#@lang"
