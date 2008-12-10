@@ -204,8 +204,8 @@ class Pickler
         end
       end
       [:requester, :owner, :mywork].each do |o|
-        on "--#{o} USERNAME" do |value|
-          modifications[o] = value
+        on "--#{o}[=USERNAME]" do |value|
+          modifications[o] = value || pickler.real_name
         end
       end
       on "--[no-]includedone", "include accepted stories" do |value|
