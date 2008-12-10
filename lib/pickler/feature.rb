@@ -54,7 +54,9 @@ class Pickler
 
     def start(default = nil)
       story.transition!("started") if story.startable?
-      pull(default)
+      if filename || default
+        pull(default)
+      end
     end
 
     def push
@@ -65,7 +67,7 @@ class Pickler
 
     def finish
       story.current_state = "finished" unless story.complete?
-      story.to_s = local_body
+      story.to_s = local_body if filename
       story.save
     end
 

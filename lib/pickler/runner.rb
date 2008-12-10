@@ -281,8 +281,7 @@ encouraged to change.
       summary "Pull a story and mark it started"
       description <<-EOF
 Pull a given story and change its state to started.  If basename is given
-and no local file exists, features/basename.feature will be created in lieu
-of features/id.feature.
+and no local file exists, features/basename.feature will be created.
       EOF
 
       process do |story, *args|
