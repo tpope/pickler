@@ -306,6 +306,34 @@ of features/id.feature.
       end
     end
 
+    command :unstart do
+      banner_arguments "[story] ..."
+      summary "Mark stories unstarted"
+      on "--all-started", "unstart all started stories" do
+        @all = true
+      end
+      process do |*args|
+        if @all
+          pickler.project.stories(:state => "started").each do |story|
+            story.transition!('unstarted')
+          end
+        end
+        args.each do |arg|
+          pickler.story(arg).transition!('unstarted')
+        end
+      end
+    end
+
+    command :unschedule do
+      banner_arguments "[story] ..."
+      summary "Move stories to icebox"
+      process do |*args|
+        args.each do |arg|
+          pickler.story(arg).transition!('unscheduled')
+        end
+      end
+    end
+
     command :browse do
       banner_arguments "[story]"
       summary "Open a story in the web browser"
