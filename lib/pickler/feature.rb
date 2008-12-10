@@ -66,9 +66,13 @@ class Pickler
     end
 
     def finish
-      story.current_state = "finished" unless story.complete?
-      story.to_s = local_body if filename
-      story.save
+      if filename
+        story.finish
+        story.to_s = local_body
+        story.save
+      else
+        story.finish!
+      end
     end
 
     def id

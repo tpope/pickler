@@ -25,12 +25,26 @@ class Pickler
         raise Pickler::Tracker::Error, "Invalid state #{state}", caller unless STATES.include?(state)
         self.current_state = state
         if id
-          xml = "<story><current-state>#{state}</current-state></story>"
+          xml = "<story><current_state>#{state}</current_state></story>"
           error = tracker.request_xml(:put, resource_url, xml).fetch("errors",{})["error"] || true
         else
           error = save
         end
         raise Pickler::Tracker::Error, Array(error).join("\n"), caller unless error == true
+      end
+
+      def finish
+        case story_type
+        when "bug", "feature"
+          self.current_state = "finished" unless complete?
+        when "chore", "release"
+          self.current_state = "accepted"
+        end
+        current_state
+      end
+
+      def finish!
+        transition!(finish)
       end
 
       def backlog?(as_of = Date.today)
