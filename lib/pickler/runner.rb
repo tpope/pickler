@@ -148,6 +148,7 @@ class Pickler
         else
           yield
         end
+      rescue Errno::EPIPE
       ensure
         $stdout = stdout
       end
