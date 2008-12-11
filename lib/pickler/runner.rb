@@ -136,6 +136,30 @@ class Pickler
         puts summary
       end
 
+      def puts_full(story)
+        puts colorize("01;3#{TYPE_COLORS[story.story_type]}", story.name)
+        puts "Type:      #{story.story_type}"
+        if story.story_type == "release"
+          puts "Deadline:  #{story.deadline}"
+        else
+          puts "Estimate:  #{story.estimate}"
+        end
+        puts "State:     #{story.current_state}".rstrip
+        puts "Labels:    #{story.labels.join(', ')}".rstrip
+        puts "Requester: #{story.requested_by}".rstrip
+        puts "Owner:     #{story.owned_by}".rstrip
+        puts "URL:       #{story.url}".rstrip
+        puts unless story.description.blank?
+        story.description_lines.each do |line|
+          puts "  #{line}".rstrip
+        end
+        story.notes.each do |note|
+          puts
+          puts "  "+colorize('01', note.author)+" (#{note.date})"
+          puts *note.lines(72).map {|l| "    #{l}"}
+        end
+      end
+
       def paginated_output
         stdout = $stdout
         if @tty && pager = pickler.config["pager"]
@@ -184,19 +208,7 @@ class Pickler
         when 1
           story = pickler.story(args.first)
           paginated_output do
-            puts story
-            puts
-            puts "Deadline: #{story.deadline}" if story.story_type == "release"
-            puts "Estimate: #{story.estimate}" if story.story_type == "feature"
-            puts "State: #{story.current_state}"
-            puts "Labels: #{story.labels.join(', ')}"
-            puts "Requested by: #{story.requested_by}"
-            puts "Owned by: #{story.owned_by}"
-            story.notes.each do |note|
-              puts
-              puts colorize('01', note.author)+" (#{note.date})"
-              puts *note.lines(72).map {|l| "    #{l}"}
-            end
+            puts_full story
           end
         else
           too_many
