@@ -138,11 +138,11 @@ class Pickler
 
       def puts_full(story)
         puts colorize("01;3#{TYPE_COLORS[story.story_type]}", story.name)
-        puts "Type:      #{story.story_type}"
+        puts "Type:      #{story.story_type}".rstrip
         if story.story_type == "release"
-          puts "Deadline:  #{story.deadline}"
+          puts "Deadline:  #{story.deadline}".rstrip
         else
-          puts "Estimate:  #{story.estimate}"
+          puts "Estimate:  #{story.estimate}".rstrip
         end
         puts "State:     #{story.current_state}".rstrip
         puts "Labels:    #{story.labels.join(', ')}".rstrip
@@ -155,8 +155,8 @@ class Pickler
         end
         story.notes.each do |note|
           puts
-          puts "  "+colorize('01', note.author)+" (#{note.date})"
-          puts *note.lines(72).map {|l| "    #{l}"}
+          puts "  #{colorize('01', note.author)} (#{note.date})"
+          puts *note.lines(72).map {|l| "    #{l}".rstrip}
         end
       end
 
