@@ -13,8 +13,8 @@ class Pickler
       def initialize(project, attributes = {})
         @project = project
         super(attributes)
-        @iteration = Iteration.new(project, attributes["iteration"]) if attributes["iteration"]
-        @labels = normalize_labels(attributes["labels"])
+        @iteration = Iteration.new(project, @attributes["iteration"]) if @attributes["iteration"]
+        @labels = normalize_labels(@attributes["labels"])
       end
 
       def labels=(value)
