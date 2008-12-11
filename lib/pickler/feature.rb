@@ -13,6 +13,9 @@ class Pickler
         @story = identifier
         @id = @story.id
 
+      when Integer
+        @id = identifier
+
       when /^#{URL_REGEX}$/, /^(\d+)$/
         @id = $1.to_i
 
