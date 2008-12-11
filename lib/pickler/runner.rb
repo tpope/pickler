@@ -184,6 +184,18 @@ class Pickler
           story = pickler.story(args.first)
           paginated_output do
             puts story
+            puts
+            puts "Deadline: #{story.deadline}" if story.story_type == "release"
+            puts "Estimate: #{story.estimate}" if story.story_type == "feature"
+            puts "State: #{story.current_state}"
+            puts "Labels: #{story.labels.join(', ')}"
+            puts "Requested by: #{story.requested_by}"
+            puts "Owned by: #{story.owned_by}"
+            story.notes.each do |note|
+              puts
+              puts colorize('01', note.author)+" (#{note.date})"
+              puts *note.lines(72).map {|l| "    #{l}"}
+            end
           end
         else
           too_many
