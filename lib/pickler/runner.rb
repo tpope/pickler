@@ -249,6 +249,10 @@ class Pickler
         @iterations << :current?
       end
 
+      on "--[no-]full", "show full story, not a summary line" do |b|
+        @full = b
+      end
+
       process do |*argv|
         argv << modifications unless modifications.empty?
         if argv == [{:includedone => true}]
@@ -261,8 +265,15 @@ class Pickler
           stories.reject! {|s| !@iterations.any? {|i| s.send(i)}}
         end
         paginated_output do
+          first = true
           stories.each do |story|
-            puts_summary story
+            if @full
+              puts unless first
+              puts_full story
+            else
+              puts_summary story
+            end
+            first = false
           end
         end
       end
