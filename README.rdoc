@@ -2,6 +2,10 @@
 
 Synchronize user stories in Pivotal Tracker with Cucumber features.
 
+If you aren't using Cucumber, you can still use pickler as a Pivotal Tracker
+command line client, provided you humor it with a features/ directory
+containing a tracker.yml file.
+
 == Getting started
 
   gem install tpope-pickler --source=http://gems.github.com
