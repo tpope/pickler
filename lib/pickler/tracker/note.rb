@@ -18,6 +18,10 @@ class Pickler
         "#<#{self.class.inspect}:#{id.inspect}, story_id: #{story.id.inspect}, date: #{date.inspect}, author: #{author.inspect}, text: #{text.inspect}>"
       end
 
+      def lines(width = 79)
+        text.scan(/(?:.{0,#{width}}|\S+?)(?:\s|$)/).map! {|line| line.strip}[0..-2]
+      end
+
     end
   end
 end
