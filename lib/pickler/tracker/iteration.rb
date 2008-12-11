@@ -29,6 +29,10 @@ class Pickler
       def inspect
         "#<#{self.class.inspect}:#{number.inspect} (#{range.inspect})>"
       end
+
+      def to_s
+        "#{number} (#{start}...#{finish})"
+      end
     end
   end
 end
