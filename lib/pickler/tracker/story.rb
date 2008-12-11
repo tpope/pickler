@@ -115,9 +115,12 @@ class Pickler
       end
 
       def comment!(body)
-        raise ArgumentError if body.strip.empty? || body.size > 5000
         response = tracker.request_xml(:post, "#{resource_url}/notes",{:text => body}.to_xml(:dasherize => false, :root => 'note'))
-        Note.new(self, response["note"])
+        if response["note"]
+          Note.new(self, response["note"])
+        else
+          raise Pickler::Tracker::Error, Array(response["errors"]["error"]).join("\n"), caller
+        end
       end
 
       def to_xml(force_labels = true)

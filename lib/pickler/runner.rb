@@ -414,6 +414,15 @@ Requires launchy (gem install launchy).
       end
     end
 
+    command :comment do
+      banner_arguments "<story> <paragraph> ..."
+      summary "Post a comment to a story"
+
+      process do |story, *paragraphs|
+        pickler.story(story).comment!(paragraphs.join("\n\n"))
+      end
+    end
+
     def initialize(argv)
       @argv = argv
     end
