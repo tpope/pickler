@@ -25,4 +25,6 @@ Gem::Specification.new do |s|
   ]
   s.add_dependency("activesupport", [">= 2.0.0"])
   s.add_dependency("cucumber", [">= 0.1.9"])
+  s.add_dependency("builder")
+  s.add_dependency("xml-simple")
 end
