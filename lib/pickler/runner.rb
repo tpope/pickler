@@ -122,7 +122,7 @@ class Pickler
         if color?
           "\e[#{code}m#{string}\e[00m"
         else
-          string
+          string.to_s
         end
       end
 
