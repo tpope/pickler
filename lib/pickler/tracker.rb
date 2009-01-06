@@ -17,17 +17,22 @@ class Pickler
       @token = token
     end
 
-    def request(method, path, *args)
-      require 'net/http'
-      Net::HTTP.start(ADDRESS) do |http|
-        headers = {
-          "X-TrackerToken" => @token,
-          "Accept"         => "application/xml",
-          "Content-type"   => "application/xml"
-        }
-        klass = Net::HTTP.const_get(method.to_s.capitalize)
-        http.request(klass.new("#{BASE_PATH}#{path}", headers), *args)
+    def http
+      unless @http
+        require 'net/http'
+        @http = Net::HTTP.new(ADDRESS)
       end
+      @http
+    end
+
+    def request(method, path, *args)
+      headers = {
+        "X-TrackerToken" => @token,
+        "Accept"         => "application/xml",
+        "Content-type"   => "application/xml"
+      }
+      klass = Net::HTTP.const_get(method.to_s.capitalize)
+      http.request(klass.new("#{BASE_PATH}#{path}", headers), *args)
     end
 
     def request_xml(method, path, *args)
