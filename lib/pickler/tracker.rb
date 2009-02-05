@@ -12,8 +12,7 @@ class Pickler
     attr_reader :token
 
     def initialize(token, ssl = false)
-      require 'active_support/core_ext/blank'
-      require 'active_support/core_ext/hash'
+      require 'active_support'
       @token = token
       @ssl = ssl
     end
