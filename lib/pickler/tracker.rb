@@ -42,6 +42,7 @@ class Pickler
         "Accept"         => "application/xml",
         "Content-type"   => "application/xml"
       }
+      http # trigger require of 'net/http'
       klass = Net::HTTP.const_get(method.to_s.capitalize)
       http.request(klass.new("#{BASE_PATH}#{path}", headers), *args)
     end
