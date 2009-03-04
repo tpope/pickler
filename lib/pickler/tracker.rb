@@ -97,7 +97,10 @@ class Pickler
           define_method("#{method}=") { |v| @attributes[method.to_s] = v }
         end
       end
-      reader :id
+
+      def id
+        id = @attributes['id'] and Integer(id)
+      end
 
       def to_xml(options = nil)
         @attributes.to_xml({:dasherize => false, :root => self.class.name.split('::').last.downcase}.merge(options||{}))
