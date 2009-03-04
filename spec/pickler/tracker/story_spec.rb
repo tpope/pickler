@@ -29,11 +29,11 @@ describe Pickler::Tracker::Story do
   end
 
   it "should have a created_at Date" do
-    @story.created_at.should be_kind_of(Date)
+    @story.created_at.should respond_to(:day)
   end
 
   it "should have a accepted_at Date" do
-    @story.accepted_at.should be_kind_of(Date)
+    @story.accepted_at.should respond_to(:day)
   end
 
   it "should have a labels Array" do

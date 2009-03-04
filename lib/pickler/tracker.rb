@@ -83,7 +83,10 @@ class Pickler
 
       def self.date_reader(*methods)
         methods.each do |method|
-          define_method(method) { value = @attributes[method.to_s] and Date.parse(value) }
+          define_method(method) do
+            value = @attributes[method.to_s]
+            value.kind_of?(String) ? Date.parse(value) : value
+          end
         end
       end
 

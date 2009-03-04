@@ -2,11 +2,18 @@ class Pickler
   class Tracker
     class Iteration < Abstract
       attr_reader :project
-      date_reader :start, :finish
 
       def initialize(project, attributes = {})
         @project = project
         super(attributes)
+      end
+
+      def start
+        Date.parse(@attributes['start'].to_s)
+      end
+
+      def finish
+        Date.parse(@attributes['finish'].to_s)
       end
 
       def number
@@ -23,7 +30,7 @@ class Pickler
       end
 
       def succ
-        self.class.new(project, 'number' => number.succ.to_s, 'start' => @attributes['finish'], 'finish' => (finish + (finish - start)).strftime("%b %d, %Y"))
+        self.class.new(project, 'number' => number.succ.to_s, 'start' => @attributes['finish'], 'finish' => (finish + (finish - start)))
       end
 
       def inspect
