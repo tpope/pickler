@@ -136,7 +136,7 @@ class Pickler
       def destroy
         if id
           response = tracker.request_xml(:delete, "/projects/#{project.id}/stories/#{id}", "")
-          raise Error, response["message"], caller if response["success"] != "true"
+          raise Error, response["message"], caller if response["message"]
           @attributes["id"] = nil
           self
         end
@@ -148,7 +148,7 @@ class Pickler
 
       def save
         response = tracker.request_xml(id ? :put : :post,  resource_url, to_xml(false))
-        if response["success"] == "true"
+        if response["story"]
           initialize(project, response["story"])
           true
         else

@@ -51,19 +51,15 @@ class Pickler
     def request_xml(method, path, *args)
       response = request(method,path,*args)
       raise response.inspect if response["Content-type"].split(/; */).first != "application/xml"
-      Hash.from_xml(response.body)["response"]
+      hash = Hash.from_xml(response.body)["response"]
+      if hash["message"] && (response.code.to_i >= 400 || hash["success"] == "false")
+        raise Error, hash["message"], caller
+      end
+      hash
     end
 
     def get_xml(path)
-      response = request_xml(:get, path)
-      unless response["success"] == "true"
-        if response["message"]
-          raise Error, response["message"], caller
-        else
-          raise "#{path}: #{response.inspect}"
-        end
-      end
-      response
+      request_xml(:get, path)
     end
 
     def project(id)
