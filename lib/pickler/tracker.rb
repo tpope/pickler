@@ -1,4 +1,5 @@
 require 'date'
+require 'cgi'
 
 class Pickler
   class Tracker
