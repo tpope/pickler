@@ -5,7 +5,7 @@ class Pickler
       TYPES = %w(bug feature chore release)
       STATES = %w(unscheduled unstarted started finished delivered rejected accepted)
 
-      attr_reader :project, :iteration, :labels
+      attr_reader :project, :labels
       reader :url
       date_reader :created_at, :accepted_at, :deadline
       accessor :current_state, :name, :description, :owned_by, :requested_by, :story_type
@@ -15,6 +15,13 @@ class Pickler
         super(attributes)
         @iteration = Iteration.new(project, @attributes["iteration"]) if @attributes["iteration"]
         @labels = normalize_labels(@attributes["labels"])
+      end
+
+      def iteration
+        unless current_state == 'unscheduled' || defined?(@iteration)
+          @iteration = project.stories(:id => id, :includedone => true).first.iteration
+        end
+        @iteration
       end
 
       def labels=(value)
