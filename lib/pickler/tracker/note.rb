@@ -3,7 +3,11 @@ class Pickler
     class Note < Abstract
       attr_reader :story
       reader :text, :author
-      date_reader :date
+      date_reader :noted_at
+
+      def date
+        noted_at && Date.new(noted_at.year, noted_at.mon, noted_at.day)
+      end
 
       def initialize(story, attributes = {})
         @story = story

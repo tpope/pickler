@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<response success="true">
-  <story>
-    <id type="integer">1</id>
-    <story_type>feature</story_type>
-    <url>http://www.pivotaltracker.com/story/show/1</url>
-    <estimate type="integer">1</estimate>
-    <current_state>accepted</current_state>
-    <description></description>
-    <name>More power to shields</name>
-    <requested_by>James Kirk</requested_by>
-    <owned_by>Montgomery Scott</owned_by>
-    <created_at>Sep 16, 2008</created_at>
-    <accepted_at>Sep 16, 2008</accepted_at>
-    <iteration>
-      <number>1</number>
-      <start>Sep 15, 2008</start>
-      <finish>Sep 29, 2008</finish>
-    </iteration>
-  </story>
-</response>
+<story>
+  <id type="integer">STORY_ID</id>
+  <story_type>feature</story_type>
+  <url>http://www.pivotaltracker.com/story/show/STORY_ID</url>
+  <estimate type="integer">1</estimate>
+  <current_state>accepted</current_state>
+  <description></description>
+  <name>More power to shields</name>
+  <requested_by>James Kirk</requested_by>
+  <owned_by>Montgomery Scott</owned_by>
+  <created_at type="datetime">2008/12/10 00:00:00 UTC</created_at>
+  <accepted_at type="datetime">2008/12/10 00:00:00 UTC</accepted_at>
+  <iteration>
+    <number>1</number>
+    <start type="datetime">2008/09/15 00:00:02 UTC</start>
+    <finish type="datetime">2008/09/29 00:00:02 UTC</finish>
+  </iteration>
+  <labels>label 1,label 2,label 3</labels>
+</story>

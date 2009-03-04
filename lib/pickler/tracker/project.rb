@@ -20,7 +20,7 @@ class Pickler
         path = "/projects/#{id}/stories"
         path << "?filter=#{CGI.escape(filter)}" if filter
         response = tracker.get_xml(path)
-        [response["stories"]["story"]].flatten.compact.map {|s| Story.new(self,s)}
+        [response["stories"]].flatten.compact.map {|s| Story.new(self,s)}
       end
 
       def new_story(attributes = {}, &block)

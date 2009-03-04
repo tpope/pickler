@@ -5,7 +5,7 @@ class Pickler
   class Tracker
 
     ADDRESS = 'www.pivotaltracker.com'
-    BASE_PATH = '/services/v1'
+    BASE_PATH = '/services/v2'
     SEARCH_KEYS = %w(label type state requester owner mywork id includedone)
 
     class Error < Pickler::Error; end
@@ -51,7 +51,7 @@ class Pickler
     def request_xml(method, path, *args)
       response = request(method,path,*args)
       raise response.inspect if response["Content-type"].split(/; */).first != "application/xml"
-      hash = Hash.from_xml(response.body)["response"]
+      hash = Hash.from_xml(response.body)
       if hash["message"] && (response.code.to_i >= 400 || hash["success"] == "false")
         raise Error, hash["message"], caller
       end
@@ -63,7 +63,7 @@ class Pickler
     end
 
     def project(id)
-      Project.new(self,get_xml("/projects/#{id}")["project"].merge("id" => id.to_i))
+      Project.new(self,get_xml("/projects/#{id}")["project"])
     end
 
     class Abstract

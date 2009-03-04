@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<response success="true">
-  <project>
-    <name>Sample Project</name>
-    <iteration_length type="integer">2</iteration_length>
-    <week_start_day>Monday</week_start_day>
-    <point_scale>0,1,2,3</point_scale>
-  </project>
-</response>
+<project>
+  <id>1</id>
+  <name>Sample Project</name>
+  <iteration_length type="integer">2</iteration_length>
+  <week_start_day>Monday</week_start_day>
+  <point_scale>0,1,2,3</point_scale>
+</project>

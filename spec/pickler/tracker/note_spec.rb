@@ -4,7 +4,7 @@ describe Pickler::Tracker::Note do
 
   before do
     @text = ""
-    @note = Pickler::Tracker::Note.new(nil, :date => "Jan 2, 2008", :text => @text)
+    @note = Pickler::Tracker::Note.new(nil, :noted_at => Time.utc(2008, 1, 2), :text => @text)
   end
 
   it "should have a date" do
