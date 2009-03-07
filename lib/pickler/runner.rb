@@ -298,7 +298,8 @@ class Pickler
       summary "Upload stories"
       description <<-EOF
 Upload the given story or all features with a tracker url in a comment on the
-first line.
+first line.  Features with a blank comment in the first line will created as
+new stories.
       EOF
 
       process do |*args|

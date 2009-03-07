@@ -112,7 +112,7 @@ class Pickler
   end
 
   def local_features
-    Dir[features_path('**','*.feature')].map {|f|feature(f)}.select {|f|f.id}
+    Dir[features_path('**','*.feature')].map {|f|feature(f)}.select {|f|f.pushable?}
   end
 
   def scenario_features

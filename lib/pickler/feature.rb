@@ -63,10 +63,26 @@ class Pickler
       end
     end
 
+    def pushable?
+      id || local_body =~ /\A#\s*\n[[:upper:]][[:lower:]]+:/ ? true : false
+    end
+
     def push
-      return if story.to_s == local_body.to_s
-      story.to_s = local_body
-      story.save
+      body = local_body
+      return if story.to_s == body.to_s
+      if story
+        story.to_s = body
+        story.save!
+      else
+        unless pushable?
+          raise Error, "To create a new story, make the first line an empty comment"
+        end
+        story = pickler.new_story
+        story.to_s = body
+        @story = story.save!
+        body.sub!(/\A(?:#.*\n)?/,"# #{story.url}\n")
+        File.open(filename,'w') {|f| f.write body}
+      end
     end
 
     def finish

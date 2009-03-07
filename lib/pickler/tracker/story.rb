@@ -88,7 +88,7 @@ class Pickler
       end
 
       def to_s=(body)
-        body = body.sub(/\A# .*\n/,'')
+        body = body.sub(/\A#.*\n/,'')
         if body =~ /\A(\w+): (.*)/
           self.story_type = $1.downcase
           self.name = $2
@@ -161,6 +161,14 @@ class Pickler
         else
           Array(response["errors"]["error"])
         end
+      end
+
+      def save!
+        errors = save
+        if errors != true
+          raise Pickler::Tracker::Error, Array(error).join("\n"), caller
+        end
+        self
       end
 
       private
