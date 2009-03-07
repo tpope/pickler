@@ -201,14 +201,28 @@ class Pickler
       banner_arguments "<story>"
       summary "Show details for a story"
 
+      on "--full", "default format" do
+        @format = :full
+      end
+
+      on "--raw", "same as the .feature" do
+        @format = :raw
+      end
+
       process do |*args|
         case args.size
         when 0
           puts "#{pickler.project_id} #{pickler.project.name}"
         when 1
-          story = pickler.story(args.first)
-          paginated_output do
-            puts_full story
+          feature = pickler.feature(args.first)
+          story = feature.story
+          case @format
+          when :raw
+            puts feature.story
+          else
+            paginated_output do
+              puts_full feature.story
+            end
           end
         else
           too_many
