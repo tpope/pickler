@@ -39,7 +39,7 @@ class Pickler
     def filename
       unless defined?(@filename)
         @filename = Dir[pickler.features_path("**","*.feature")].detect do |f|
-          File.read(f)[/#\s*#{URL_REGEX}/,1].to_i == @id
+          File.read(f)[/(?:#\s*|@[[:punct:]]?)#{URL_REGEX}/,1].to_i == @id
         end
       end
       @filename
@@ -97,7 +97,7 @@ class Pickler
 
     def id
       unless defined?(@id)
-        @id = if id = local_body.to_s[/#\s*#{URL_REGEX}/,1]
+        @id = if id = local_body.to_s[/(?:#\s*|@[[:punct:]]?)#{URL_REGEX}/,1]
                 id.to_i
               end
       end

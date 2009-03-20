@@ -88,7 +88,7 @@ class Pickler
       end
 
       def to_s=(body)
-        body = body.sub(/\A#.*\n/,'')
+        body = body.sub(/\A[@#].*\n/,'')
         if body =~ /\A(\w+): (.*)/
           self.story_type = $1.downcase
           self.name = $2
