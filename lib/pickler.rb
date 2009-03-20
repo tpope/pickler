@@ -84,9 +84,8 @@ class Pickler
 
   def parser
     require 'cucumber'
-    require "cucumber/treetop_parser/feature_#@lang"
     Cucumber.load_language(@lang)
-    @parser ||= Cucumber::TreetopParser::FeatureParser.new
+    @parser ||= Cucumber::Parser::FeatureParser.new
   end
 
   def project_id
@@ -108,7 +107,7 @@ class Pickler
 
   def scenario_word
     parser
-    Cucumber.language['scenario']
+    Cucumber.keyword_hash['scenario']
   end
 
   def format
