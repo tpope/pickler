@@ -218,7 +218,7 @@ class Pickler
           story = feature.story
           case @format
           when :raw
-            puts feature.story
+            puts feature.story.to_s(pickler.format) if feature.story
           else
             paginated_output do
               puts_full feature.story

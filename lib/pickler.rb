@@ -111,6 +111,10 @@ class Pickler
     Cucumber.language['scenario']
   end
 
+  def format
+    (config['format'] || :comment).to_sym
+  end
+
   def local_features
     Dir[features_path('**','*.feature')].map {|f|feature(f)}.select {|f|f.pushable?}
   end

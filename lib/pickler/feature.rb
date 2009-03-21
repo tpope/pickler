@@ -46,13 +46,13 @@ class Pickler
     end
 
     def to_s
-      local_body || story.to_s
+      local_body || story.to_s(pickler.format)
     end
 
     def pull(default = nil)
       filename = filename() || pickler.features_path("#{default||id}.feature")
       story = story() # force the read into local_body before File.open below blows it away
-      File.open(filename,'w') {|f| f.puts story}
+      File.open(filename,'w') {|f| f.puts story.to_s(pickler.format)}
       @filename = filename
     end
 
@@ -64,12 +64,12 @@ class Pickler
     end
 
     def pushable?
-      id || local_body =~ /\A#\s*\n[[:upper:]][[:lower:]]+:/ ? true : false
+      id || local_body =~ %r{\A(?:#\s*|@http://www\.pivotaltracker\.com/story/new(?:\s+@\S+)*\s*)\n[[:upper:]][[:lower:]]+:} ? true : false
     end
 
     def push
       body = local_body
-      return if story.to_s == body.to_s
+      return if story.to_s(pickler.format) == body.to_s
       if story
         story.to_s = body
         story.save!

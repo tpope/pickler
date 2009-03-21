@@ -79,16 +79,28 @@ class Pickler
         project.tracker
       end
 
-      def to_s
-        to_s = "# #{url}\n#{story_type.capitalize}: #{name}\n"
+      def to_s(format = :comment)
+        to_s = "#{header(format)}\n#{story_type.capitalize}: #{name}\n"
         description_lines.each do |line|
           to_s << "  #{line}".rstrip << "\n"
         end
         to_s
       end
 
+      def header(format = :comment)
+        case format
+        when :tag
+          "@#{url}#{labels.map {|l| " @#{l.tr('_,',' _')}"}.join}"
+        else
+          "# #{url}"
+        end
+      end
+
       def to_s=(body)
-        body = body.sub(/\A[@#].*\n/,'')
+        if body =~ /\A@https?\b\S*(\s+@\S+)*\s*$/
+          self.labels = body[/\A@.*/].split(/\s+/)[1..-1].map {|l| l[1..-1].tr(' _','_,')}
+        end
+        body = body.sub(/\A(?:[@#].*\n)+/,'')
         if body =~ /\A(\w+): (.*)/
           self.story_type = $1.downcase
           self.name = $2
