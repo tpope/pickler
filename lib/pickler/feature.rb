@@ -64,7 +64,7 @@ class Pickler
     end
 
     def pushable?
-      id || local_body =~ %r{\A(?:#\s*|@http://www\.pivotaltracker\.com/story/new(?:\s+@\S+)*\s*)\n[[:upper:]][[:lower:]]+:} ? true : false
+      id || local_body =~ %r{\A(?:#\s*|@[[:punct:]]?(?:http://www\.pivotaltracker\.com/story/new)?[[:punct:]]?(?:\s+@\S+)*\s*)\n[[:upper:]][[:lower:]]+:} ? true : false
     end
 
     def push
