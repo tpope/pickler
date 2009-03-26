@@ -29,7 +29,7 @@ class Pickler
           @filename = path
         end
 
-      end or raise Error, "Unrecogizable feature #{identifier}"
+      end or raise Error, "Unrecognizable feature #{identifier}"
     end
 
     def local_body
