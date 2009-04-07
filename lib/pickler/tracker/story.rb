@@ -178,7 +178,7 @@ class Pickler
       def save!
         errors = save
         if errors != true
-          raise Pickler::Tracker::Error, Array(error).join("\n"), caller
+          raise Pickler::Tracker::Error, Array(errors).join("\n"), caller
         end
         self
       end
