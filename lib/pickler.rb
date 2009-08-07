@@ -82,10 +82,9 @@ class Pickler
     project.deliver_all_finished_stories
   end
 
-  def parser
+  def parse(story)
     require 'cucumber'
-    Cucumber.load_language(@lang)
-    @parser ||= Cucumber::Parser::FeatureParser.new
+    Cucumber::FeatureFile.new(story.url, story.to_s).parse(:lang => @lang)
   end
 
   def project_id
@@ -106,8 +105,8 @@ class Pickler
   end
 
   def scenario_word
-    parser
-    Cucumber.keyword_hash['scenario']
+    require 'cucumber'
+    Cucumber::Parser::I18n::Language[@lang].scenario_keyword.chomp(':')
   end
 
   def format
@@ -122,7 +121,7 @@ class Pickler
     project.stories(scenario_word, :includedone => true).reject do |s|
       Array(excluded_states).map {|state| state.to_s}.include?(s.current_state)
     end.select do |s|
-      s.to_s =~ /^\s*#{Regexp.escape(scenario_word)}:/ && parser.parse(s.to_s)
+      s.to_s =~ /^\s*#{Regexp.escape(scenario_word)}:/ && parse(s) rescue false
     end
   end
 
