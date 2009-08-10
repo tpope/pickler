@@ -1,6 +1,6 @@
 class Pickler
   class Feature
-    URL_REGEX = %r{\bhttp://www\.pivotaltracker\.com/\S*/(\d+)\b}
+    URL_REGEX = %r{\bhttps?://www\.pivotaltracker\.com/\S*/(\d+)\b}
     attr_reader :pickler
 
     def initialize(pickler, identifier)
