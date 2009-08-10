@@ -110,7 +110,7 @@ class Pickler
   end
 
   def format
-    (config['format'] || :comment).to_sym
+    (config['format'] || :tag).to_sym
   end
 
   def local_features
