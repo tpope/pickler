@@ -106,7 +106,7 @@ class Pickler
 
   def scenario_word
     require 'cucumber'
-    Cucumber::Parser::I18n::Language[@lang].scenario_keyword.chomp(':')
+    Cucumber::LANGUAGES[@lang]['scenario']
   end
 
   def format
