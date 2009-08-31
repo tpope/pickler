@@ -64,7 +64,7 @@ class Pickler
     end
 
     def pushable?
-      id || local_body =~ %r{\A(?:#\s*|@[[:punct:]]?(?:http://www\.pivotaltracker\.com/story/new)?[[:punct:]]?(?:\s+@\S+)*\s*)\n[[:upper:]][[:lower:]]+:} ? true : false
+      id || local_body =~ %r{\A(?:#\s*|@[[:punct:]]?(?:https?://www\.pivotaltracker\.com/story/new)?[[:punct:]]?(?:\s+@\S+)*\s*)\n[[:upper:]][[:lower:]]+:} ? true : false
     end
 
     def push
@@ -75,12 +75,14 @@ class Pickler
         story.save!
       else
         unless pushable?
-          raise Error, "To create a new story, make the first line an empty comment"
+          raise Error, "To create a new story, tag it @http://www.pivotaltracker.com/story/new"
         end
         story = pickler.new_story
         story.to_s = body
         @story = story.save!
-        body.sub!(/\A(?:#.*\n)?/,"# #{story.url}\n")
+        unless body.sub!(%r{\bhttps?://www\.pivotaltracker\.com/story/new\b}, story.url)
+          body.sub!(/\A(?:#.*\n)?/,"# #{story.url}\n")
+        end
         File.open(filename,'w') {|f| f.write body}
       end
     end
