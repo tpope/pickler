@@ -84,7 +84,7 @@ class Pickler
 
   def parse(story)
     require 'cucumber'
-    Cucumber::FeatureFile.new(story.url, story.to_s).parse(:lang => @lang)
+    Cucumber::FeatureFile.new(story.url, story.to_s).parse(Cucumber::StepMother.new, :lang => @lang)
   end
 
   def project_id
