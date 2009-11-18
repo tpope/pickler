@@ -13,7 +13,7 @@ Spec::Runner.configure do |config|
         response.instance_variable_set(:@body, File.read(file))
         response.add_field "Content-type", "application/xml"
         url = "http://www.pivotaltracker.com/services/v2/#{file.sub(/\.xml$/,'')}"
-        FakeWeb.register_uri(url, :response => response)
+        FakeWeb.register_uri(:get, url, :response => response)
       end
     end
   end
