@@ -133,6 +133,14 @@ class Pickler
         @attributes["estimate"].to_i < 0 ? nil : @attributes["estimate"]
       end
 
+      def suggested_basename(user_override = nil)
+        if user_override.to_s !~ /\A-?\z/
+          user_override
+        else
+          name.to_s.empty? ? id.to_s : name.gsub(/[^\w-]+/,'_').downcase
+        end
+      end
+
       def comment!(body)
         response = tracker.request_xml(:post, "#{resource_url}/notes",{:text => body}.to_xml(:dasherize => false, :root => 'note'))
         if response["note"]

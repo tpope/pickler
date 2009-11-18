@@ -315,8 +315,6 @@ new stories.
       summary "Download stories"
       description <<-EOF
 Download the given story or all well formed stories to the features/ directory.
-Previously unseen stories will be given a numeric filename that you are
-encouraged to change.
       EOF
 
       process do |*args|
@@ -332,7 +330,9 @@ encouraged to change.
       summary "Pull a story and mark it started"
       description <<-EOF
 Pull a given story and change its state to started.  If basename is given
-and no local file exists, features/basename.feature will be created.
+and no local file exists, features/basename.feature will be created.  Give a
+basename of "-" to use a downcased, underscored version of the story name as
+the basename.
       EOF
 
       process do |story, *args|

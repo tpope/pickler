@@ -48,4 +48,23 @@ describe Pickler::Tracker::Story do
     @story.iteration.should be_kind_of(Pickler::Tracker::Iteration)
   end
 
+  describe "#suggested_basename" do
+
+    it "should return the user override if it's not blank or \"-\"" do
+      story = @project.new_story(:name => "Name")
+      story.suggested_basename('foo_bar').should eql('foo_bar')
+      story.suggested_basename('').should_not eql('')
+      story.suggested_basename('-').should_not eql('-')
+    end
+
+    it "returns the id if no name is present" do
+      @project.new_story(:id => 123).suggested_basename.should eql('123')
+    end
+
+    it "sluggifies the name" do
+      @project.new_story(:name => "Foo: bar-baz").suggested_basename.should eql("foo_bar-baz")
+    end
+
+  end
+
 end
