@@ -90,7 +90,7 @@ class Pickler
       def header(format = :comment)
         case format
         when :tag
-          "@#{url}#{labels.map {|l| " @#{l.tr('_,',' _')}"}.join}"
+          "@#{url}#{labels.map {|l| " @#{l.tr(' _','_,')}"}.join}"
         else
           "# #{url}"
         end
@@ -98,7 +98,7 @@ class Pickler
 
       def to_s=(body)
         if body =~ /\A@https?\b\S*(\s+@\S+)*\s*$/
-          self.labels = body[/\A@.*/].split(/\s+/)[1..-1].map {|l| l[1..-1].tr(' _','_,')}
+          self.labels = body[/\A@.*/].split(/\s+/)[1..-1].map {|l| l[1..-1].tr('_,',' _')}
         end
         body = body.sub(/\A(?:[@#].*\n)+/,'')
         if body =~ /\A(\w+): (.*)/
