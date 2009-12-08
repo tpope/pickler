@@ -14,7 +14,6 @@ class Pickler
         @project = project
         super(attributes)
         @iteration = Iteration.new(project, @attributes["iteration"]) if @attributes["iteration"]
-        @labels = normalize_labels(@attributes["labels"])
       end
 
       def iteration
@@ -131,6 +130,10 @@ class Pickler
 
       def estimate
         @attributes["estimate"].to_i < 0 ? nil : @attributes["estimate"]
+      end
+
+      def estimate=(value)
+        @attributes["estimate"] = value.nil? ? -1 : value
       end
 
       def suggested_basename(user_override = nil)

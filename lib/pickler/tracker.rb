@@ -70,7 +70,11 @@ class Pickler
       def initialize(attributes = {})
         @attributes = {}
         (attributes || {}).each do |k,v|
-          @attributes[k.to_s] = v
+          if respond_to?("#{k}=")
+            send("#{k}=", v)
+          else
+            @attributes[k.to_s] = v
+          end
         end
         yield self if block_given?
       end

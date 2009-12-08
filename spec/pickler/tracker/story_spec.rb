@@ -20,6 +20,10 @@ describe Pickler::Tracker::Story do
     @project.new_story(:estimate => "-1").estimate.should be_nil
   end
 
+  it "should persist -1 for a nil estimate assignment" do
+    @project.new_story(:estimate => nil).instance_variable_get(:@attributes)['estimate'].should == -1
+  end
+
   it "should have a name String" do
     @story.name.should be_kind_of(String)
   end
