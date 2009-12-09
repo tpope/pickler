@@ -12,6 +12,7 @@ class Pickler
 
       def initialize(project, attributes = {})
         @project = project
+        @labels = []
         super(attributes)
         @iteration = Iteration.new(project, @attributes["iteration"]) if @attributes["iteration"]
       end
