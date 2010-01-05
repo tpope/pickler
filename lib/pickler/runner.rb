@@ -201,11 +201,11 @@ class Pickler
       banner_arguments "<story>"
       summary "Show details for a story"
 
-      on "--full", "default format" do
+      on "--full", "default format" do |full|
         @format = :full
       end
 
-      on "--raw", "same as the .feature" do
+      on "--raw", "same as the .feature" do |raw|
         @format = :raw
       end
 
