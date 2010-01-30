@@ -12,7 +12,7 @@ Spec::Runner.configure do |config|
         response = Net::HTTPOK.new("1.1","200","OK")
         response.instance_variable_set(:@body, File.read(file))
         response.add_field "Content-type", "application/xml"
-        url = "http://www.pivotaltracker.com/services/v2/#{file.sub(/\.xml$/,'')}"
+        url = "http://www.pivotaltracker.com/services/v3/#{file.sub(/\.xml$/,'')}"
         FakeWeb.register_uri(:get, url, :response => response)
       end
     end

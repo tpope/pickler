@@ -5,7 +5,7 @@ class Pickler
   class Tracker
 
     ADDRESS = 'www.pivotaltracker.com'
-    BASE_PATH = '/services/v2'
+    BASE_PATH = '/services/v3'
     SEARCH_KEYS = %w(label type state requester owner mywork id includedone)
 
     class Error < Pickler::Error; end
