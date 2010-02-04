@@ -90,7 +90,7 @@ class Pickler
       def header(format = :comment)
         case format
         when :tag
-          "@#{url}#{labels.map {|l| " @#{l.tr(' _','_,')}"}.join}"
+          "@#{url || "#{project.use_https? ? 'https' : 'http'}://www.pivotaltracker.com/story/new"}#{labels.map {|l| " @#{l.tr(' _','_,')}"}.join}"
         else
           "# #{url}"
         end
