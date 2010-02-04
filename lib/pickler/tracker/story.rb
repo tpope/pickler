@@ -79,7 +79,7 @@ class Pickler
         project.tracker
       end
 
-      def to_s(format = :comment)
+      def to_s(format = :tag)
         to_s = "#{header(format)}\n#{story_type.capitalize}: #{name}\n"
         description_lines.each do |line|
           to_s << "  #{line}".rstrip << "\n"
@@ -87,7 +87,7 @@ class Pickler
         to_s
       end
 
-      def header(format = :comment)
+      def header(format = :tag)
         case format
         when :tag
           "@#{url || "#{project.use_https? ? 'https' : 'http'}://www.pivotaltracker.com/story/new"}#{labels.map {|l| " @#{l.tr(' _','_,')}"}.join}"
