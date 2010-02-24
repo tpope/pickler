@@ -84,6 +84,9 @@ class Pickler
         description_lines.each do |line|
           to_s << "  #{line}".rstrip << "\n"
         end
+        if to_s !~ /\A[\0-\177]*\z/
+          to_s = "# -*- coding: utf-8 -*-\n#{to_s}"
+        end
         to_s
       end
 
