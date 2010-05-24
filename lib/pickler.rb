@@ -106,9 +106,9 @@ class Pickler
 
   def scenario_word
     require 'cucumber'
-    Cucumber::LANGUAGES[@lang]['scenario']
+    Gherkin::I18n::LANGUAGES[@lang]['scenario']
   end
-
+  
   def format
     (config['format'] || :tag).to_sym
   end
