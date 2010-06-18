@@ -53,6 +53,12 @@ Full list of commands.
 
 Further help for a given command.
 
+== Contributing
+
+Pull requests will be ignored if they don't follow the Git convention of
+a 50 character or less subject and optional paragraphs wrapped to 72
+characters.  See http://stopwritingramblingcommitmessages.com/.
+
 == Disclaimer
 
 No warranties, expressed or implied.
