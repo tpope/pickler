@@ -85,7 +85,10 @@ class Pickler
 
   def parse(story)
     require 'cucumber'
-    Cucumber::FeatureFile.new(story.url, story.to_s).parse(Cucumber::StepMother.new, :lang => @lang)
+    Cucumber::FeatureFile.new(story.url, story.to_s).parse(
+      Cucumber::StepMother.new,
+      Cucumber::Cli::Options.new
+    )
   end
 
   def project_id
@@ -109,7 +112,7 @@ class Pickler
     require 'cucumber'
     Gherkin::I18n::LANGUAGES[@lang]['scenario']
   end
-  
+
   def format
     (config['format'] || :tag).to_sym
   end

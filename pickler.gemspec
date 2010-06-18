@@ -24,5 +24,5 @@ Gem::Specification.new do |s|
     "lib/pickler/tracker/note.rb"
   ]
   s.add_dependency("activesupport", [">= 2.0.0"])
-  s.add_dependency("cucumber", [">= 0.3.96"])
+  s.add_dependency("cucumber", [">= 0.8.0"])
 end
