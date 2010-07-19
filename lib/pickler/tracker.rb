@@ -1,5 +1,6 @@
 require 'date'
 require 'cgi'
+require 'crack/xml'
 
 class Pickler
   class Tracker
@@ -13,7 +14,6 @@ class Pickler
     attr_reader :token
 
     def initialize(token, ssl = false)
-      require 'active_support'
       @token = token
       @ssl = ssl
     end
@@ -51,7 +51,7 @@ class Pickler
     def request_xml(method, path, *args)
       response = request(method,path,*args)
       raise response.inspect if response["Content-type"].split(/; */).first != "application/xml"
-      hash = Hash.from_xml(response.body)
+      hash = Crack::XML.parse(response.body)
       if hash["message"] && (response.code.to_i >= 400 || hash["success"] == "false")
         raise Error, hash["message"], caller
       end

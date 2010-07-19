@@ -23,6 +23,6 @@ Gem::Specification.new do |s|
     "lib/pickler/tracker/iteration.rb",
     "lib/pickler/tracker/note.rb"
   ]
-  s.add_dependency("activesupport", [">= 2.0.0"])
+  s.add_dependency("crack", [">= 0.1.8"])
   s.add_dependency("cucumber", [">= 0.8.0"])
 end
