@@ -85,8 +85,8 @@ class Pickler
   def parse(story)
     require 'cucumber'
     Cucumber::FeatureFile.new(story.url, story.to_s).parse(
-      Cucumber::StepMother.new,
-      Cucumber::Cli::Options.new
+      Cucumber::Cli::Options.new,
+      {}
     )
   end
 
@@ -124,7 +124,7 @@ class Pickler
     project.stories(scenario_word, :includedone => true).reject do |s|
       Array(excluded_states).map {|state| state.to_s}.include?(s.current_state)
     end.select do |s|
-      s.to_s =~ /^\s*#{Regexp.escape(scenario_word)}:/ && parse(s) rescue false
+      s.to_s =~ /^\s*#{Regexp.escape(scenario_word)}:/ && parse(s)
     end
   end
 
