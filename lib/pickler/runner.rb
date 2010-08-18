@@ -149,7 +149,7 @@ class Pickler
         puts "Requester: #{story.requested_by}".rstrip
         puts "Owner:     #{story.owned_by}".rstrip
         puts "URL:       #{story.url}".rstrip
-        puts unless story.description.blank?
+        puts unless story.description =~ /^\s*$/
         story.description_lines.each do |line|
           puts "  #{line}".rstrip
         end
