@@ -17,6 +17,19 @@ class Pickler
     )
   end
 
+  def self.hash_to_xml(root, attributes)
+    require 'cgi'
+    xml = "<#{root}>"
+    attributes.each do |k,v|
+      if v.kind_of?(Hash)
+        xml << hash_to_xml(k, v)
+      else
+        xml << "<#{k}>#{CGI.escapeHTML(v.to_s)}</#{k}>"
+      end
+    end
+    xml << "</#{root}>"
+  end
+
   def self.run(argv)
     Runner.new(argv).run
   end

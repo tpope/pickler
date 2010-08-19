@@ -105,8 +105,8 @@ class Pickler
         id = @attributes['id'] and Integer(id)
       end
 
-      def to_xml(options = nil)
-        @attributes.to_xml({:dasherize => false, :root => self.class.name.split('::').last.downcase}.merge(options||{}))
+      def to_xml
+        Pickler.hash_to_xml(self.class.name.split('::').last.downcase, @attributes)
       end
 
     end

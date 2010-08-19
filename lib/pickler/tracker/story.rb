@@ -149,7 +149,7 @@ class Pickler
       end
 
       def comment!(body)
-        response = tracker.request_xml(:post, "#{resource_url}/notes",{:text => body}.to_xml(:dasherize => false, :root => 'note'))
+        response = tracker.request_xml(:post, "#{resource_url}/notes",Pickler.hash_to_xml(:note, :text => body))
         if response["note"]
           Note.new(self, response["note"])
         else
@@ -164,7 +164,7 @@ class Pickler
         if force_labels || !id || normalize_labels(@attributes["labels"]) != labels
           hash["labels"] = labels.join(", ")
         end
-        hash.to_xml(:dasherize => false, :root => "story")
+        Pickler.hash_to_xml(:story, hash)
       end
 
       def destroy
