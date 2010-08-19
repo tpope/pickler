@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name                = "pickler"
-  s.version             = "0.1.6"
+  s.version             = "0.1.7"
 
   s.summary             = "PIvotal traCKer Liaison to cucumbER"
   s.description         = "Synchronize between Cucumber and Pivotal Tracker"
