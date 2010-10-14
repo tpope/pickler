@@ -8,9 +8,10 @@ Rake::GemPackageTask.new(spec) do |p|
 end
 
 begin
-  require 'spec/rake/spectask'
-  Spec::Rake::SpecTask.new(:spec) do |t|
-    t.spec_files = FileList["spec/**/*_spec.rb"]
+  require 'rspec/core/rake_task'
+  RSpec::Core::RakeTask.new(:spec) do |t|
+    t.rspec_opts = "--color"
+    t.pattern = "spec/**/*_spec.rb"
   end
   task :default => :spec
 rescue LoadError

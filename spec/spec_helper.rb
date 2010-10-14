@@ -1,9 +1,9 @@
 $LOAD_PATH.unshift(File.join(File.dirname(File.dirname(__FILE__)),'lib'))
 require 'pickler'
 begin; require 'rubygems'; rescue LoadError; end
-require 'spec'
+require 'rspec'
 
-Spec::Runner.configure do |config|
+RSpec.configure do |config|
   config.before(:all) do
     require 'fake_web'
     directory = File.join(File.dirname(__FILE__),'tracker')

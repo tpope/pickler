@@ -25,6 +25,6 @@ Gem::Specification.new do |s|
   ]
   s.add_runtime_dependency("crack", [">= 0.1.8"])
   s.add_runtime_dependency("cucumber", ["~> 0.8.5"])
-  s.add_development_dependency("rspec", ["~> 1.3.0"])
-  s.add_development_dependency("fakeweb", ["~> 1.2.0"])
+  s.add_development_dependency("rspec", ["~> 2.0.0"])
+  s.add_development_dependency("fakeweb", ["~> 1.3.0"])
 end
