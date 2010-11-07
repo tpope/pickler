@@ -59,6 +59,9 @@ Pull requests will be ignored if they don't follow the Git convention of
 a 50 character or less subject and optional paragraphs wrapped to 72
 characters.  See http://stopwritingramblingcommitmessages.com/.
 
+If I provide you with feedback on your pull request, generally you should
+squash your changes into the previous commit when submitting a second request.
+
 == Disclaimer
 
 No warranties, expressed or implied.
