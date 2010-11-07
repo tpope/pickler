@@ -27,7 +27,8 @@ feature's body.  Keep this in mind when entering stories into Pivotal Tracker.
 
   pickler pull
 
-Download all well formed stories to the features/ directory.
+Download all well formed stories (those in valid Cucumber syntax with at least
+one scenario in them) to the features/ directory.
 
   pickler push
 
@@ -37,9 +38,16 @@ Upload all features with a tracker url in a comment on the first line.
 
 List all stories matching the given query.
 
-  pickler start <story>
+  pickler start <story> <name>
 
-Pull a given feature and change its state to started.
+Pull a given feature to features/<name>.feature and change its state to
+started.
+
+  pickler start <story> -
+
+Pull a given feature to a file name based on the title and change its state to
+started.  (I use this more than any other command, and you probably should,
+too).
 
   pickler finish <story>
 
