@@ -156,7 +156,7 @@ class Pickler
         story.notes.each do |note|
           puts
           puts "  #{colorize('01', note.author)} (#{note.date})"
-          puts *note.lines(72).map {|l| "    #{l}".rstrip}
+          puts(*note.lines(72).map {|l| "    #{l}".rstrip})
         end
       end
 
