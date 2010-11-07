@@ -314,7 +314,10 @@ new stories.
       banner_arguments "[story] ..."
       summary "Download stories"
       description <<-EOF
-Download the given story or all well formed stories to the features/ directory.
+Download the given story story to the features/ directory.  With no arguments,
+downloads all stories that look like Cucumber features (with "Scenario:" and
+valid Cucumber syntax).  The version without arguments is mainly useful for
+syncing existing features.
       EOF
 
       process do |*args|
