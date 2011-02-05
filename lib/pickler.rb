@@ -95,14 +95,6 @@ class Pickler
     project.deliver_all_finished_stories
   end
 
-  def parse(story)
-    require 'cucumber'
-    Cucumber::FeatureFile.new(story.url, story.to_s).parse(
-      Cucumber::Cli::Options.new,
-      {}
-    )
-  end
-
   def project_id
     config["project_id"] || (self.class.config["projects"]||{})[File.basename(@directory)]
   end
@@ -121,8 +113,11 @@ class Pickler
   end
 
   def scenario_word
-    require 'cucumber'
-    Gherkin::I18n::LANGUAGES[@lang]['scenario']
+    if @lang == 'en'
+      'Scenario'
+    else
+      raise Error, 'Sorry, no internationalization support (yet)'
+    end
   end
 
   def format
@@ -137,7 +132,7 @@ class Pickler
     project.stories(scenario_word, :includedone => true).reject do |s|
       Array(excluded_states).map {|state| state.to_s}.include?(s.current_state)
     end.select do |s|
-      s.to_s =~ /^\s*#{Regexp.escape(scenario_word)}:/ && parse(s)
+      s.to_s =~ /^\s*#{Regexp.escape(scenario_word)}:/
     end
   end
 

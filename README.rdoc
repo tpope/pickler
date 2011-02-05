@@ -27,8 +27,8 @@ feature's body.  Keep this in mind when entering stories into Pivotal Tracker.
 
   pickler pull
 
-Download all well formed stories (those in valid Cucumber syntax with at least
-one scenario in them) to the features/ directory.
+Download all well formed stories (basically, any story with "Scenario:" in the
+body) to the features/ directory.
 
   pickler push
 
