@@ -7,7 +7,6 @@ Gem::Specification.new do |s|
   s.authors             = ["Tim Pope"]
   s.email               = "ruby@tpope.o"+'org'
   s.homepage            = "http://github.com/tpope/pickler"
-  s.default_executable  = "pickler"
   s.executables         = ["pickler"]
   s.files               = [
     "README.rdoc",
