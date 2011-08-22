@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.summary             = "PIvotal traCKer Liaison to cucumbER"
   s.description         = "Synchronize between Cucumber and Pivotal Tracker"
   s.authors             = ["Tim Pope"]
-  s.email               = "ruby@tpope.o"+'org'
+  s.email               = "ruby@tpope.o"+'rg'
   s.homepage            = "http://github.com/tpope/pickler"
   s.executables         = ["pickler"]
   s.files               = [
