@@ -23,7 +23,7 @@ class Pickler
     end
 
     def http
-      unless @http
+      unless defined?(@http)
         if ssl?
           require 'net/https'
           @http = Net::HTTP.new(ADDRESS, Net::HTTP.https_default_port)
