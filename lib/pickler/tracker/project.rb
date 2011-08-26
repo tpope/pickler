@@ -18,11 +18,11 @@ class Pickler
         @attributes
       end
 
-      def initialize(tracker, attributes = {}, id = nil)
+      def initialize(tracker, attributes = {}, &block)
         @tracker = tracker
-        if id
-          @attributes_fetcher = attributes
-          @id = id
+        if block_given?
+          @id = attributes
+          @attributes_fetcher = block
         else
           super(attributes)
         end

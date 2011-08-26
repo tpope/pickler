@@ -63,7 +63,9 @@ class Pickler
     end
 
     def project(id)
-      Project.new(self, lambda { get_xml("/projects/#{id}")["project"] }, id)
+      Project.new(self, id) do
+        get_xml("/projects/#{id}")["project"]
+      end
     end
 
     class Abstract
