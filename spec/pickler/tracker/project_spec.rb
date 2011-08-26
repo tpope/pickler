@@ -41,4 +41,10 @@ describe Pickler::Tracker::Project do
     story.id.should be_nil
   end
 
+  it "should provide lazy load" do
+    @project = Pickler::Tracker::Project.new(@tracker, lambda { {:point_scale => '0'} }, '1')
+    @project.id.should == 1
+    @project.point_scale.should == '0'
+  end
+
 end

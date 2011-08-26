@@ -5,9 +5,27 @@ class Pickler
       attr_reader :tracker
       reader :point_scale, :week_start_day, :name, :iteration_length
 
-      def initialize(tracker, attributes = {})
+      def id
+        id = @id || attributes['id'] and Integer(id)
+      end
+
+      def attributes
+        unless defined?(@attributes)
+          self.class.superclass.instance_method(:initialize).bind(self).call(
+            @attributes_fetcher.call
+          )
+        end
+        @attributes
+      end
+
+      def initialize(tracker, attributes = {}, id = nil)
         @tracker = tracker
-        super(attributes)
+        if id
+          @attributes_fetcher = attributes
+          @id = id
+        else
+          super(attributes)
+        end
       end
 
       def use_https?
