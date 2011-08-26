@@ -441,6 +441,26 @@ Requires launchy (gem install launchy).
       end
     end
 
+    command :install_vim_plugin do
+      banner_arguments "[directory]"
+      summary "install pickler.vim"
+
+      process do |*argv|
+        source = File.expand_path('../../../plugin/pickler.vim', __FILE__)
+        require 'fileutils'
+        directory = argv.first ||
+          if RUBY_PLATFORM =~ /win/i
+            "#{ENV['USERPROFILE']}/vimfiles/plugin"
+          else
+            File.expand_path('~/.vim/plugin')
+          end
+        FileUtils.mkdir_p(directory)
+        FileUtils.cp(source, directory)
+        puts "Installed to #{directory}/pickler.vim."
+        puts "Be sure to keep it up to date!"
+      end
+    end
+
     def initialize(argv)
       @argv = argv
     end

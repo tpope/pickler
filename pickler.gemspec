@@ -20,7 +20,8 @@ Gem::Specification.new do |s|
     "lib/pickler/tracker/project.rb",
     "lib/pickler/tracker/story.rb",
     "lib/pickler/tracker/iteration.rb",
-    "lib/pickler/tracker/note.rb"
+    "lib/pickler/tracker/note.rb",
+    "plugin/pickler.vim",
   ]
   s.add_runtime_dependency("crack", [">= 0.1.8"])
   s.add_development_dependency("rake", ["~> 0.9.2"])

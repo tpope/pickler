@@ -54,6 +54,12 @@ too).
 
 Push a given feature and change its state to finished.
 
+  pickler install-vim-plugin [<directory>]
+
+Installs the Vim plugin to <directory>, or ~/.vim/plugin.  This plugin
+currently only provides omnicomplete (CTRL-X, CTRL-O) of feature ids in Git
+commit messages.
+
   pickler --help
 
 Full list of commands.
