@@ -9,15 +9,15 @@ class Pickler
       end
 
       def start
-        Date.parse(@attributes['start'].to_s)
+        Date.parse(attributes['start'].to_s)
       end
 
       def finish
-        Date.parse(@attributes['finish'].to_s)
+        Date.parse(attributes['finish'].to_s)
       end
 
       def number
-        @attributes['number'].to_i
+        attributes['number'].to_i
       end
       alias to_i number
 
@@ -30,7 +30,7 @@ class Pickler
       end
 
       def succ
-        self.class.new(project, 'number' => number.succ.to_s, 'start' => @attributes['finish'], 'finish' => (finish + (finish - start)))
+        self.class.new(project, 'number' => number.succ.to_s, 'start' => attributes['finish'], 'finish' => (finish + (finish - start)))
       end
 
       def inspect

@@ -67,6 +67,8 @@ class Pickler
     end
 
     class Abstract
+      attr_reader :attributes
+
       def initialize(attributes = {})
         @attributes = {}
         (attributes || {}).each do |k,v|
@@ -81,14 +83,14 @@ class Pickler
 
       def self.reader(*methods)
         methods.each do |method|
-          define_method(method) { @attributes[method.to_s] }
+          define_method(method) { attributes[method.to_s] }
         end
       end
 
       def self.date_reader(*methods)
         methods.each do |method|
           define_method(method) do
-            value = @attributes[method.to_s]
+            value = attributes[method.to_s]
             value.kind_of?(String) ? Date.parse(value) : value
           end
         end
@@ -97,16 +99,16 @@ class Pickler
       def self.accessor(*methods)
         reader(*methods)
         methods.each do |method|
-          define_method("#{method}=") { |v| @attributes[method.to_s] = v }
+          define_method("#{method}=") { |v| attributes[method.to_s] = v }
         end
       end
 
       def id
-        id = @attributes['id'] and Integer(id)
+        id = attributes['id'] and Integer(id)
       end
 
       def to_xml
-        Pickler.hash_to_xml(self.class.name.split('::').last.downcase, @attributes)
+        Pickler.hash_to_xml(self.class.name.split('::').last.downcase, attributes)
       end
 
     end

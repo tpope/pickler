@@ -15,7 +15,7 @@ class Pickler
       end
 
       def to_xml
-        Pickler.hash_to_xml(:note, @attributes)
+        Pickler.hash_to_xml(:note, attributes)
       end
 
       def inspect

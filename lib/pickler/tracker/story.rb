@@ -14,7 +14,7 @@ class Pickler
         @project = project
         @labels = []
         super(attributes)
-        @iteration = Iteration.new(project, @attributes["iteration"]) if @attributes["iteration"]
+        @iteration = Iteration.new(project, attributes["iteration"]) if attributes["iteration"]
       end
 
       def iteration
@@ -129,15 +129,15 @@ class Pickler
       end
 
       def notes
-        [@attributes["notes"]].flatten.compact.map {|n| Note.new(self,n)}
+        [attributes["notes"]].flatten.compact.map {|n| Note.new(self,n)}
       end
 
       def estimate
-        @attributes["estimate"].to_i < 0 ? nil : @attributes["estimate"]
+        attributes["estimate"].to_i < 0 ? nil : @attributes["estimate"]
       end
 
       def estimate=(value)
-        @attributes["estimate"] = value.nil? ? -1 : value
+        attributes["estimate"] = value.nil? ? -1 : value
       end
 
       def suggested_basename(user_override = nil)
@@ -158,10 +158,10 @@ class Pickler
       end
 
       def to_xml(force_labels = true)
-        hash = @attributes.reject do |k,v|
+        hash = attributes.reject do |k,v|
           !%w(current_state deadline description estimate name owned_by requested_by story_type).include?(k)
         end
-        if force_labels || !id || normalize_labels(@attributes["labels"]) != labels
+        if force_labels || !id || normalize_labels(attributes["labels"]) != labels
           hash["labels"] = labels.join(", ")
         end
         Pickler.hash_to_xml(:story, hash)
@@ -171,7 +171,7 @@ class Pickler
         if id
           response = tracker.request_xml(:delete, "/projects/#{project.id}/stories/#{id}", "")
           raise Error, response["message"], caller if response["message"]
-          @attributes["id"] = nil
+          attributes["id"] = nil
           self
         end
       end

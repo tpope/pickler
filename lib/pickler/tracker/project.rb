@@ -11,7 +11,7 @@ class Pickler
       end
 
       def use_https?
-        @attributes['use_https'].to_s == 'true'
+        attributes['use_https'].to_s == 'true'
       end
 
       def story(story_id)
