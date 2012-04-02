@@ -18,7 +18,7 @@ endfunction
 augroup pickler
   autocmd!
   autocmd BufRead *.git/COMMIT_EDITMSG
-        \ if filereadable(substitute(expand('<afile>'),'\.git.\w\+$','features/tracker.yml','')) |
+        \ if filereadable(substitute(expand('<afile>:p'),'\.git.\w\+$','features/tracker.yml','')) |
         \   setlocal omnifunc=pickler#omnifunc |
         \ endif
 augroup END
