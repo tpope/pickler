@@ -8,7 +8,7 @@ containing a tracker.yml file.
 
 == Getting started
 
-  gem install pickler --source=http://gemcutter.org
+  gem install pickler
   echo "api_token: ..."  > ~/.tracker.yml
   echo "project_id: ..." > ~/my/app/features/tracker.yml
   echo "ssl: [true|false]" >> ~/my/app/features/tracker.yml
