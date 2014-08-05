@@ -11,10 +11,7 @@ containing a tracker.yml file.
   gem install pickler
   echo "api_token: ..."  > ~/.tracker.yml
   echo "project_id: ..." > ~/my/app/features/tracker.yml
-  echo "ssl: [true|false]" >> ~/my/app/features/tracker.yml
   pickler --help
-
-"ssl" defaults to false if not configured in the yml file.
 
 For details about the Pivotal Tracker API, including where to find your API
 token and project id, see http://www.pivotaltracker.com/help/api .

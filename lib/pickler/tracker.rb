@@ -13,26 +13,20 @@ class Pickler
 
     attr_reader :token
 
-    def initialize(token, ssl = false)
+    def initialize(token, ssl = :ignored)
       @token = token
-      @ssl = ssl
     end
 
     def ssl?
-      @ssl
+      true
     end
 
     def http
       unless defined?(@http)
-        if ssl?
-          require 'net/https'
-          @http = Net::HTTP.new(ADDRESS, Net::HTTP.https_default_port)
-          @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
-          @http.use_ssl = true
-        else
-          require 'net/http'
-          @http = Net::HTTP.new(ADDRESS)
-        end
+        require 'net/https'
+        @http = Net::HTTP.new(ADDRESS, Net::HTTP.https_default_port)
+        @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+        @http.use_ssl = true
       end
       @http
     end
