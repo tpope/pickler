@@ -8,43 +8,43 @@ describe Pickler::Tracker::Project do
   end
 
   it "should have an id Integer" do
-    @project.id.should be_kind_of(Integer)
+    expect(@project.id).to be_kind_of(Integer)
   end
 
   it "should have a name String" do
-    @project.name.should be_kind_of(String)
+    expect(@project.name).to be_kind_of(String)
   end
 
   it "should have an iteration length Integer" do
-    @project.iteration_length.should be_kind_of(Integer)
+    expect(@project.iteration_length).to be_kind_of(Integer)
   end
 
   it "should have a week start day String" do
-    @project.week_start_day.should be_kind_of(String)
+    expect(@project.week_start_day).to be_kind_of(String)
   end
 
   it "should have a point scale String" do
-    @project.point_scale.should be_kind_of(String)
+    expect(@project.point_scale).to be_kind_of(String)
   end
 
   it "should have a collection of stories" do
-    @project.stories.first.should be_kind_of(Pickler::Tracker::Story)
+    expect(@project.stories.first).to be_kind_of(Pickler::Tracker::Story)
   end
 
   it "should retrieve a story by id" do
-    @project.story(1).should be_kind_of(Pickler::Tracker::Story)
+    expect(@project.story(1)).to be_kind_of(Pickler::Tracker::Story)
   end
 
   it "should have a story factory" do
     story = @project.new_story
-    story.should be_kind_of(Pickler::Tracker::Story)
-    story.id.should be_nil
+    expect(story).to be_kind_of(Pickler::Tracker::Story)
+    expect(story.id).to be_nil
   end
 
   it "should provide lazy load" do
     @project = Pickler::Tracker::Project.new(@tracker, 1) { {:point_scale => '0'} }
-    @project.id.should == 1
-    @project.point_scale.should == '0'
+    expect(@project.id).to eq 1
+    expect(@project.point_scale).to eq '0'
   end
 
 end

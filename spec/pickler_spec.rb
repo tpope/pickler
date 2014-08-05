@@ -6,6 +6,6 @@ describe Pickler do
   end
 
   it "should detect the project" do
-    @pickler.project.name.should == "Sample Project"
+    expect(@pickler.project.name).to eq "Sample Project"
   end
 end

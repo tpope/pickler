@@ -7,7 +7,7 @@ describe Pickler::Tracker do
   end
 
   it "should retrieve a project by id" do
-    @tracker.project(1).should be_kind_of(Pickler::Tracker::Project)
+    expect(@tracker.project(1)).to be_kind_of(Pickler::Tracker::Project)
   end
 
 end
