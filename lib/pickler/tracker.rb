@@ -1,12 +1,14 @@
 require 'date'
 require 'cgi'
 require 'crack/xml'
+require 'json'
 
 class Pickler
   class Tracker
 
     ADDRESS = 'www.pivotaltracker.com'
     BASE_PATH = '/services/v3'
+    V5_BASE_PATH = '/services/v5'
     SEARCH_KEYS = %w(label type state requester owner mywork id includedone)
 
     class Error < Pickler::Error; end
@@ -31,21 +33,42 @@ class Pickler
       @http
     end
 
-    def request(method, path, *args)
-      headers = {
-        "X-TrackerToken" => @token,
-        "Accept"         => "application/xml",
-        "Content-type"   => "application/xml"
-      }
+    def request(method, path, headers, *args)
       http # trigger require of 'net/http'
       klass = Net::HTTP.const_get(method.to_s.capitalize)
       http.request(klass.new("#{BASE_PATH}#{path}", headers), *args)
     end
 
+    def request_v5(method, path, headers, *args)
+      http # trigger require of 'net/http'
+      klass = Net::HTTP.const_get(method.to_s.capitalize)
+      http.request(klass.new("#{V5_BASE_PATH}#{path}", headers), *args)
+    end
+
     def request_xml(method, path, *args)
-      response = request(method,path,*args)
+      headers = {
+          "X-TrackerToken" => @token,
+          "Accept"         => "application/xml",
+          "Content-type"   => "application/xml"
+      }
+      response = request(method, path, headers, *args)
       raise response.inspect if response["Content-type"].split(/; */).first != "application/xml"
       hash = Crack::XML.parse(response.body)
+      if hash["message"] && (response.code.to_i >= 400 || hash["success"] == "false")
+        raise Error, hash["message"], caller
+      end
+      hash
+    end
+
+    def request_json(method, path, *args)
+      headers = {
+          "X-TrackerToken" => @token,
+          "Accept"         => "application/json",
+          "Content-type"   => "application/json"
+      }
+      response = request_v5(method, path, headers, *args)
+      raise response.inspect if response["Content-type"].split(/; */).first != "application/json"
+      hash = JSON.parse(response.body)
       if hash["message"] && (response.code.to_i >= 400 || hash["success"] == "false")
         raise Error, hash["message"], caller
       end
@@ -56,9 +79,13 @@ class Pickler
       request_xml(:get, path)
     end
 
+    def get_json(path)
+      request_json(:get, path)
+    end
+
     def project(id)
       Project.new(self, id) do
-        get_xml("/projects/#{id}")["project"]
+        get_json("/projects/#{id}")
       end
     end
 

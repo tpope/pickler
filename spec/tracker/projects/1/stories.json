@@ -1,0 +1,21 @@
+[
+  {
+    "kind": "story",
+    "id": 1,
+    "created_at": "2017-03-14T17:09:07Z",
+    "updated_at": "2017-03-14T17:12:57Z",
+    "estimate": 1,
+    "story_type": "feature",
+    "name": "TestPickler",
+    "description": "",
+    "current_state": "started",
+    "requested_by_id": 1,
+    "url": "https://www.pivotaltracker.com/story/show/1",
+    "project_id": 1,
+    "owner_ids": [
+      1
+    ],
+    "labels": [],
+    "owned_by_id": 1
+  }
+]
