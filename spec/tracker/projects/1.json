@@ -1,0 +1,32 @@
+{
+  "id": 1,
+  "kind": "project",
+  "name": "Sample Project",
+  "version": 1,
+  "iteration_length": 1,
+  "week_start_day": "Monday",
+  "point_scale": "1,2,3",
+  "point_scale_is_custom": true,
+  "bugs_and_chores_are_estimatable": false,
+  "automatic_planning": true,
+  "enable_tasks": true,
+  "time_zone": {
+    "kind": "time_zone",
+    "olson_name": "America/Los_Angeles",
+    "offset": "-07:00"
+  },
+  "velocity_averaged_over": 3,
+  "number_of_done_iterations_to_show": 12,
+  "has_google_domain": false,
+  "enable_incoming_emails": true,
+  "initial_velocity": 10,
+  "public": false,
+  "atom_enabled": false,
+  "project_type": "shared",
+  "start_time": "2017-02-27T08:00:00Z",
+  "created_at": "2017-02-07T18:30:56Z",
+  "updated_at": "2017-03-13T14:59:44Z",
+  "account_id": 1,
+  "current_iteration_number": 3,
+  "enable_following": true
+}
