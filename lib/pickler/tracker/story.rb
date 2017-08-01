@@ -81,8 +81,22 @@ class Pickler
 
       def to_s(format = :tag)
         to_s = "#{header(format)}\n#{story_type.capitalize}: #{name}\n"
-        description_lines.each do |line|
-          to_s << "  #{line}".rstrip << "\n"
+        if description_lines.index('---')
+          description_array = description_lines.each_slice(description_lines.index('---')).to_a
+          top_description_lines = description_array.first # feature story
+          bottom_description_lines = description_array.last # metadata
+
+          top_description_lines.each do |line|
+            to_s << "  #{line}".rstrip << "\n"
+          end
+
+          bottom_description_lines.each do |line|
+            to_s << "#  #{line}".rstrip << "\n"
+          end
+        else
+          description_lines.each do |line|
+            to_s << "  #{line}".rstrip << "\n"
+          end
         end
         if to_s !~ /\A[\0-\177]*\z/
           to_s = "# -*- coding: utf-8 -*-\n#{to_s}"
@@ -114,9 +128,30 @@ class Pickler
           description = $'
         end
         self.description = description.gsub(/\A\n+|\n+\Z/,'') + "\n"
+
         if description_lines.all? {|l| l.empty? || l =~ /^  /}
           self.description.gsub!(/^  /,'')
+        else
+          push_description_lines = self.description.split("\n")
+
+          if push_description_lines.index('#  ---')
+            out = ''
+            description_array = push_description_lines.each_slice(push_description_lines.index('#  ---')).to_a
+            top_description_lines = description_array.first # feature story
+            bottom_description_lines = description_array.last # metadata
+
+            top_description_lines.each do |line, index|
+              out << line.gsub(/^  /,'') << "\n"
+            end
+
+            bottom_description_lines.each do |line, index|
+              out << line.gsub(/^#\s{0,2}/,'') << "\n"
+            end
+
+            self.description = out
+          end
         end
+
         self
       end
 
