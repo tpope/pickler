@@ -7,7 +7,7 @@ class Pickler
 
       attr_reader :project, :labels
       reader :url
-      date_reader :created_at, :accepted_at, :deadline
+      date_reader :created_at, :updated_at, :accepted_at, :deadline
       accessor :current_state, :name, :description, :owned_by, :requested_by, :story_type
 
       def initialize(project, attributes = {})
@@ -80,7 +80,7 @@ class Pickler
       end
 
       def to_s(format = :tag)
-        to_s = "#{header(format)}\n#{story_type.capitalize}: #{name}\n"
+        to_s = "#{header(format)}\n#{updated_at_annotation}\n#{story_type.capitalize}: #{name}\n"
         if description_lines.index('---')
           description_array = description_lines.each_slice(description_lines.index('---')).to_a
           top_description_lines = description_array.first # feature story
@@ -111,6 +111,10 @@ class Pickler
         else
           "# #{url}"
         end
+      end
+
+      def updated_at_annotation
+        "# updated_at: #{updated_at}"
       end
 
       def to_s=(body)
