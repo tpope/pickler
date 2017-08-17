@@ -49,11 +49,16 @@ class Pickler
       local_body || story.to_s(pickler.format)
     end
 
-    def pull(default = nil)
+    def pull(default = nil, updating_timestamp: false)
       story = story() # force the read into local_body before File.open below blows it away
       filename = filename() || pickler.features_path("#{story.suggested_basename(default)}.feature")
       File.open(filename,'w') {|f| f.puts story.to_s(pickler.format)}
       @filename = filename
+      if updating_timestamp
+        puts "Updated timestamp for story:                  '#{story.name}'"
+      else
+        puts "Pulled story:                                 '#{story.name}'"
+      end
     end
 
     def start(default = nil)
@@ -70,9 +75,22 @@ class Pickler
     def push
       body = local_body
       if story
-        return if story.to_s(pickler.format) == body.to_s
+        if local_timestamp.nil?
+          return puts "Local story w/o timestamp;  Story not pushed: '#{story.name}'"
+        end
+
+        if story.to_s(pickler.format) == body.to_s
+          return puts "Local story matches remote; Story not pushed: '#{story.name}'"
+        end
+
+        if story.attributes['updated_at'] > local_timestamp
+          return puts "Local story out of date; Please pull first:   '#{story.name}'"
+        end
+
         story.to_s = body
         story.save!
+        puts "Story pushed successfully:                    '#{story.name}'"
+        pull(updating_timestamp: true)
       else
         unless pushable?
           raise Error, "To create a new story, tag it @http://www.pivotaltracker.com/story/new"
@@ -104,6 +122,13 @@ class Pickler
               end
       end
       @id
+    end
+
+    def local_timestamp
+      datetime_str = local_body.to_s[/^(?:#\s*)updated_at:\s*(.*)$/,1]
+      Time.parse(datetime_str)
+    rescue StandardError
+      nil
     end
 
     def story
